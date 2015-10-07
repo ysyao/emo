@@ -1,0 +1,24 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--<item name="vpiIconPageIndicatorStyle">@style/Widget.IconPageIndicator</item>-->
+        <!--<item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>-->
+
+        <item name="toolbarStyle">@style/myToolbarStyle</item>
+        <item name="toolbarNavigationButtonStyle">@style/myToolbarNavigationButtonStyle</item>
+    </style>
+    <style name="myToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="android:paddingRight">10dp</item>
+    </style>
+    <style name="myToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+</resources>
