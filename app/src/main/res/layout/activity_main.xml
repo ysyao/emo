@@ -11,8 +11,8 @@
         tools:context="com.phl.emoproject.ui.MainActivity">
 
         <LinearLayout
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:orientation="vertical"
@@ -131,8 +131,6 @@
             android:textSize="20sp"
             android:background="@drawable/bg_round_blue_button"
             android:layout_height="wrap_content" />
-
-
     </RelativeLayout>
 
 </LinearLayout>

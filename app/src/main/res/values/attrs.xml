@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ILifeRadioButton" >
-        <attr name="is_checked" format="boolean" />
-        <attr name="drawable_selected" format="reference" />
-        <attr name="drawable_unselected" format="reference" />
-    </declare-styleable>
+
 </resources>

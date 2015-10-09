@@ -25,6 +25,8 @@ public class LoginActivity extends RoboActionBarActivity{
                 AsyncHttpClient client = new AsyncHttpClient();
 //                client.addHeader("");
 //                client.get(this, )
+
+                redirect();
             }
         });
     }

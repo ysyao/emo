@@ -1,8 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bottombar="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/layout_toolbar" />
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_above="@+id/bottombar"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/bottombar"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/lightgray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <com.phl.emoproject.widget.bottom_bar.SelectableBottomTextView
+                android:paddingBottom="@dimen/activity_ui_margin_small"
+                android:paddingTop="@dimen/activity_ui_margin_small"
+                android:id="@+id/news"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="新闻列表"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                bottombar:selected_icon="@drawable/pic_news"
+                bottombar:unselected_icon="@drawable/pic_news"
+                bottombar:text_selected_color="@color/blue"
+                bottombar:text_unselected_color="@color/category_bar_header_text_color"
+                bottombar:background_selected_color="@color/lightgray"
+                bottombar:background_unselected_color="@color/verylightgray"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <com.phl.emoproject.widget.bottom_bar.SelectableBottomTextView
+                android:paddingBottom="@dimen/activity_ui_margin_small"
+                android:paddingTop="@dimen/activity_ui_margin_small"
+                android:id="@+id/home"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="首页"
+                android:gravity="center"
+                android:textSize="12sp"
+                bottombar:selected_icon="@drawable/pic_home"
+                bottombar:unselected_icon="@drawable/pic_home"
+                bottombar:text_selected_color="@color/blue"
+                bottombar:text_unselected_color="@color/category_bar_header_text_color"
+                bottombar:background_selected_color="@color/silver"
+                bottombar:background_unselected_color="@color/verylightgray"
+                bottombar:default_selected="true"
+                />
+            <View
+                android:id="@+id/center_horizental"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+            <com.phl.emoproject.widget.bottom_bar.SelectableBottomTextView
+                android:paddingBottom="@dimen/activity_ui_margin_small"
+                android:paddingTop="@dimen/activity_ui_margin_small"
+                android:id="@+id/me"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="个人中心"
+                android:textSize="12sp"
+                bottombar:selected_icon="@drawable/pic_me"
+                bottombar:unselected_icon="@drawable/pic_me"
+                bottombar:text_selected_color="@color/lightblue"
+                bottombar:text_unselected_color="@color/category_bar_header_text_color"
+                bottombar:background_selected_color="@color/lightgray"
+                bottombar:background_unselected_color="@color/verylightgray"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
