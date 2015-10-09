@@ -1,28 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.phl.emoproject.ui.HomeFragment">
-
-    <TextView
-        android:id="@+id/no_data"
-        android:layout_centerInParent="true"
-        android:text="无数据"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <ListView
-        android:divider="@null"
-        android:dividerHeight="@dimen/listview_divider_height"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.phl.emoproject.ui.HomeFragment">
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/fragment_container"
+        android:layout_weight="1" />
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/order_listview"/>
-
-    <ProgressBar
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/ctrlActivityIndicator"
-        android:indeterminateOnly="true"
-        android:keepScreenOn="true"
+        android:background="@color/orange"
+        android:layout_height="1dp"/>
+    <GridView
+        android:layout_marginTop="@dimen/activity_ui_margin_medium"
+        android:verticalSpacing="@dimen/activity_horizontal_margin_large"
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:numColumns="3"
         />
-
-
-</RelativeLayout>
+</LinearLayout>

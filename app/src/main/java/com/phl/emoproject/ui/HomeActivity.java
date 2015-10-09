@@ -43,6 +43,7 @@ public class HomeActivity extends RoboActionBarActivity implements
         viewPager.setAdapter(new HomeViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setOffscreenPageLimit(3);
         viewPager.setOnPageChangeListener(this);
+        homeTv.performClick();
     }
 
     @Override

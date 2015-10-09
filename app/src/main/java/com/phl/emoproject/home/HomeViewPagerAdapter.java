@@ -19,16 +19,15 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return NewsFragment.newInstance("", "");
-            case 1:
+            default:
                 return HomeFragment.newInstance();
             case 2:
                 return MeFragment.newInstance("", "");
         }
-        return null;
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return 3;
     }
 }
