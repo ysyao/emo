@@ -18,7 +18,7 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return NewsFragment.newInstance("", "");
+                return NewsFragment.newInstance();
             default:
                 return HomeFragment.newInstance();
             case 2:

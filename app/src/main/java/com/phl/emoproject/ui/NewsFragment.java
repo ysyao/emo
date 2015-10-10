@@ -1,34 +1,44 @@
 package com.phl.emoproject.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
 import com.phl.emoproject.R;
+import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
+import com.phl.emoproject.home.NewsListAdapter;
+import com.phl.emoproject.pojo.ListGenericClass;
+import com.phl.emoproject.pojo.NewsList;
+import com.phl.emoproject.utils.AsyncHttpClientUtils;
+import com.phl.emoproject.utils.Constans;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NewsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NewsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class NewsFragment extends Fragment {
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NewsFragment newInstance(String param1, String param2) {
+import org.apache.http.Header;
+
+import roboguice.fragment.RoboFragment;
+import roboguice.inject.InjectView;
+
+public class NewsFragment extends RoboFragment implements
+        SwipeRefreshLayout.OnRefreshListener{
+    @InjectView(R.id.swipe_container)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @InjectView(R.id.news_listview)
+    ListView newsLv;
+    String loginId;
+    NewsListAdapter newsListAdapter;
+
+    public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -40,12 +50,19 @@ public class NewsFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorScheme(R.color.blue,
+                R.color.greenyellow,
+                R.color.orange, R.color.red);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 
     @Override
@@ -55,43 +72,50 @@ public class NewsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_news, container, false);
     }
 
-//    //  Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        public void onFragmentInteraction(Uri uri);
-//    }
+    @Override
+    public void onRefresh() {
+        if (loginId == null) {
+            SharedPreferences sp = getActivity().getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            loginId = sp.getString(Constans.LOGIN_ID, "");
+        }
+
+        AsyncHttpClientUtils.postNewsList(getActivity(), loginId, new NewsListResponse());
+    }
+
+    private class NewsListResponse extends BaseAsyncHttpResponseHandler<ListGenericClass<NewsList>> {
+        public NewsListResponse() {
+            super();
+            setType(new TypeToken<ListGenericClass<NewsList>>(){}.getType());
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, ListGenericClass<NewsList> newsListListGenericClass) {
+            swipeRefreshLayout.setRefreshing(false);
+            if (newsListListGenericClass.getMessage().getReturnCode() == 0) {
+                //  2015/10/10 Set Adapter
+                if (newsListAdapter == null) {
+                    newsListAdapter = new NewsListAdapter(getActivity(), newsListListGenericClass.getJsonList());
+                    newsLv.setAdapter(newsListAdapter);
+                    newsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            NewsList item = (NewsList)adapterView.getItemAtPosition(i);
+                            Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
+                            intent.putExtra("id", item.getId());
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    newsListAdapter.updateAdapter(newsListListGenericClass.getJsonList());
+                }
+            }
+        }
+
+    }
 
 }

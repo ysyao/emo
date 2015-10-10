@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -30,7 +31,7 @@ import static com.phl.emoproject.utils.Constans.PASSWORD;
 
 @ContentView(R.layout.activity_main)
 public class LoginActivity extends RoboActionBarActivity{
-    @InjectView(R.id.login_button)
+    @InjectView(R.id.container)
     View button;
     @InjectView(R.id.account)
     EditText account;
@@ -38,6 +39,9 @@ public class LoginActivity extends RoboActionBarActivity{
     EditText password;
     @InjectView(R.id.radio_password)
     ILifeRadioButton isStore;
+    @InjectView(R.id.indicator)
+    ProgressBar indicator;
+    AsyncHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class LoginActivity extends RoboActionBarActivity{
         if (!checkIsNull(accountStr, passwordStr)) {
             account.setText(accountStr);
             password.setText(passwordStr);
+            isStore.setChecked(true);
         }
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -61,12 +66,24 @@ public class LoginActivity extends RoboActionBarActivity{
                     Toast.makeText(LoginActivity.this, "请填写账号和密码", Toast.LENGTH_LONG).show();
                     return;
                 }
-                AsyncHttpClientUtils.postLoginRequest(LoginActivity.this,
+                indicator.setVisibility(View.VISIBLE);
+                button.setClickable(false);
+                button.setEnabled(false);
+
+                client = AsyncHttpClientUtils.postLoginRequest(LoginActivity.this,
                         accountStr,
                         passStr,
                         new LoginResponse());
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (client != null) {
+            client.cancelRequests(this, true);
+        }
     }
 
     private void redirect() {
@@ -88,6 +105,9 @@ public class LoginActivity extends RoboActionBarActivity{
         }
         @Override
         public void onSuccess(int statusCode, Header[] headers, LoginRes loginRes) {
+            button.setClickable(true);
+            button.setEnabled(true);
+            indicator.setVisibility(View.GONE);
             if (loginRes.getMessage().getReturnCode() == 0) {
                 redirect();
 
@@ -109,6 +129,9 @@ public class LoginActivity extends RoboActionBarActivity{
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            button.setClickable(true);
+            button.setEnabled(true);
+            indicator.setVisibility(View.GONE);
             Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
         }
     }

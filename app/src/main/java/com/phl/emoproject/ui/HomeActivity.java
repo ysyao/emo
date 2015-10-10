@@ -78,16 +78,19 @@ public class HomeActivity extends RoboActionBarActivity implements
                 newsTv.setTextViewSelected(true);
                 homeTv.setTextViewSelected(false);
                 meTv.setTextViewSelected(false);
+                ToolbarUtils.setCenterTitle(toolbar, "新闻列表");
                 break;
             case 1:
                 newsTv.setTextViewSelected(false);
                 homeTv.setTextViewSelected(true);
                 meTv.setTextViewSelected(false);
+                ToolbarUtils.setCenterTitle(toolbar, "首页");
                 break;
             case 2:
                 newsTv.setTextViewSelected(false);
                 homeTv.setTextViewSelected(false);
                 meTv.setTextViewSelected(true);
+                ToolbarUtils.setCenterTitle(toolbar, "个人中心");
                 break;
         }
     }

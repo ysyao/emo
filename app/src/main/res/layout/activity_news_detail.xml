@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <include layout="@layout/layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentTop="true"/>
+    <ScrollView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+        <TextView
+            android:textColor="@color/blue_home"
+            android:textSize="15sp"
+            android:text="提高科技人员奖金比例"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_marginBottom="@dimen/activity_ui_margin_medium"
+            android:layout_marginTop="@dimen/activity_ui_margin_medium"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/silver"/>
+
+       <WebView
+          android:id="@+id/webview"
+           android:layout_weight="1"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+        <View
+            android:layout_marginBottom="@dimen/activity_ui_margin_medium"
+            android:layout_marginTop="@dimen/activity_ui_margin_medium"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/silver"/>
+
+        <TextView
+            android:textColor="@color/blue_home"
+            android:textSize="15sp"
+            android:drawableLeft="@drawable/files"
+            android:gravity="center_vertical"
+            android:text="附件"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.phl.emoproject.widget.WrapContentHeightListView
+            android:id="@+id/files_listview"
+            android:dividerHeight="@dimen/activity_ui_margin_small"
+            android:divider="@android:color/transparent"
+            android:layout_marginTop="@dimen/activity_ui_margin_medium"
+            android:background="@color/gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/indicator"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

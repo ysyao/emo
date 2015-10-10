@@ -1,6 +1,7 @@
 package com.phl.emoproject.core;
 
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.google.gson.Gson;
@@ -98,6 +99,7 @@ public abstract class BaseAsyncHttpResponseHandler<T> extends AsyncHttpResponseH
                 event = parser.next();
             }
 
+            Log.d("ssssssssssssssssssss", s.trim());
             Gson gson = new Gson();
             if (listType == null) {
                 return gson.fromJson(s.trim(), type);

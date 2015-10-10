@@ -13,11 +13,28 @@ public class AsyncHttpClientUtils {
         return client;
     }
 
-    public static void postLoginRequest(Context context, String account, String password, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+    public static AsyncHttpClient postLoginRequest(Context context, String account, String password, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
         AsyncHttpClient client = AsyncHttpClientUtils.createClient();
         RequestParams params = new RequestParams();
         params.put("LoginId", account);
         params.put("password", password);
         client.post(context, Constans.LOGIN, params, baseAsyncHttpResponseHandler);
+        return client;
+    }
+
+    public static AsyncHttpClient postNewsList(Context context, String account, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        params.put("LoginId", account);
+        client.post(context, Constans.NEWS_LIST, params, baseAsyncHttpResponseHandler);
+        return client;
+    }
+
+    public static AsyncHttpClient postNewsDetail(Context context, String id, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        params.put("Id", id);
+        client.post(context, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
+        return client;
     }
 }

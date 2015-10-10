@@ -8,5 +8,7 @@ public interface Constans {
 
     String PATH  = "http://oa.ynrjkj.com/mobile/EomWebService.asmx";
 
-    String LOGIN = PATH+"/Login";
+    String LOGIN = PATH + "/Login";
+    String NEWS_LIST = PATH + "/GetNewsList";
+    String NEWS_DETAIL = PATH + "/GetNewInfo";
 }
