@@ -92,7 +92,7 @@
                 android:textStyle="bold"
                 bottombar:selected_icon="@drawable/pic_me_selected"
                 bottombar:unselected_icon="@drawable/pic_me_unselected"
-                bottombar:text_selected_color="@color/lightblue"
+                bottombar:text_selected_color="@color/blue"
                 bottombar:text_unselected_color="@color/category_bar_header_text_color"
                 bottombar:background_selected_color="@color/lightgray"
                 bottombar:background_unselected_color="@color/verylightgray"

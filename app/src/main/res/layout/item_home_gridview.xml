@@ -7,14 +7,14 @@
     <ImageView
         android:id="@+id/pic"
         android:src="@drawable/pic_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <TextView
         android:id="@+id/title"
         android:layout_marginTop="@dimen/activity_ui_margin_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:textSize="13sp"
         android:text="EOM代办列表"/>
 </LinearLayout>

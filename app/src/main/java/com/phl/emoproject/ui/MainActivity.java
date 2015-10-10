@@ -22,6 +22,7 @@ public class MainActivity extends RoboActionBarActivity {
             i = new Intent(this, HomeActivity.class);
         }
         startActivity(i);
+        finish();
     }
 
 }
