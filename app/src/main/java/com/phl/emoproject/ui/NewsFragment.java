@@ -1,12 +1,9 @@
 package com.phl.emoproject.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +12,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpClient;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
 import com.phl.emoproject.home.NewsListAdapter;
 import com.phl.emoproject.pojo.ListGenericClass;
 import com.phl.emoproject.pojo.NewsList;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
-import com.phl.emoproject.utils.Constans;
+import com.phl.emoproject.core.Constans;
 
 import org.apache.http.Header;
 

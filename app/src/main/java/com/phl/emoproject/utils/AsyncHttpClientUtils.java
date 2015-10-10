@@ -5,6 +5,7 @@ import android.content.Context;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
+import com.phl.emoproject.core.Constans;
 
 public class AsyncHttpClientUtils {
     public static AsyncHttpClient createClient() {

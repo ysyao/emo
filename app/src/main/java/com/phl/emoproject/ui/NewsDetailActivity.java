@@ -2,12 +2,9 @@ package com.phl.emoproject.ui;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
@@ -16,7 +13,6 @@ import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
 import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
-import com.phl.emoproject.utils.Constans;
 import com.phl.emoproject.utils.ToolbarUtils;
 
 import org.apache.http.Header;

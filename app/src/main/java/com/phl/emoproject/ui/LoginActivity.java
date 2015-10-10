@@ -10,14 +10,11 @@ import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.ResponseHandlerInterface;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
 import com.phl.emoproject.pojo.LoginRes;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
-import com.phl.emoproject.utils.Constans;
+import com.phl.emoproject.core.Constans;
 import com.phl.emoproject.widget.radio_button.ILifeRadioButton;
 
 import org.apache.http.Header;
@@ -26,8 +23,8 @@ import roboguice.activity.RoboActionBarActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-import static com.phl.emoproject.utils.Constans.LOGIN_ID;
-import static com.phl.emoproject.utils.Constans.PASSWORD;
+import static com.phl.emoproject.core.Constans.LOGIN_ID;
+import static com.phl.emoproject.core.Constans.PASSWORD;
 
 @ContentView(R.layout.activity_main)
 public class LoginActivity extends RoboActionBarActivity{
