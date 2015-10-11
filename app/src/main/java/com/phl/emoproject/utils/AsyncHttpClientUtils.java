@@ -2,15 +2,18 @@ package com.phl.emoproject.utils;
 
 
 import android.content.Context;
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
 import com.phl.emoproject.core.Constans;
 
 public class AsyncHttpClientUtils {
+    final static AsyncHttpClient client = new AsyncHttpClient();
     public static AsyncHttpClient createClient() {
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+//        AsyncHttpClient client = new AsyncHttpClient();
+//        client.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
         return client;
     }
 
@@ -19,23 +22,36 @@ public class AsyncHttpClientUtils {
         RequestParams params = new RequestParams();
         params.put("LoginId", account);
         params.put("password", password);
-        client.post(context, Constans.LOGIN, params, baseAsyncHttpResponseHandler);
-        return client;
+//        client.post(context, Constans.LOGIN, params, baseAsyncHttpResponseHandler);
+        return postRequest(context, client, Constans.LOGIN, params, baseAsyncHttpResponseHandler);
     }
 
     public static AsyncHttpClient postNewsList(Context context, String account, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
         AsyncHttpClient client = AsyncHttpClientUtils.createClient();
         RequestParams params = new RequestParams();
         params.put("LoginId", account);
-        client.post(context, Constans.NEWS_LIST, params, baseAsyncHttpResponseHandler);
-        return client;
+//        client.post(context, Constans.NEWS_LIST, params, baseAsyncHttpResponseHandler);
+        return postRequest(context, client, Constans.NEWS_LIST, params, baseAsyncHttpResponseHandler);
     }
 
     public static AsyncHttpClient postNewsDetail(Context context, String id, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
         AsyncHttpClient client = AsyncHttpClientUtils.createClient();
         RequestParams params = new RequestParams();
-        params.put("Id", id);
-        client.post(context, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
+        params.put("id", id);
+//        client.get(context, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
+//        Log.d("ssssssssssss", client.getUrlWithQueryString(true, Constans.NEWS_DETAIL, params));
+        return getRequest(context, client, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
+    }
+
+    public static AsyncHttpClient postRequest(Context context, AsyncHttpClient client, String url, RequestParams params, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        Log.d("ssssssssssss", client.getUrlWithQueryString(true, url, params));
+        client.post(context, url, params, baseAsyncHttpResponseHandler);
+        return client;
+    }
+
+    public static AsyncHttpClient getRequest(Context context, AsyncHttpClient client, String url, RequestParams params, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        Log.d("ssssssssssss", client.getUrlWithQueryString(true, url, params));
+        client.get(context, url, params, baseAsyncHttpResponseHandler);
         return client;
     }
 }

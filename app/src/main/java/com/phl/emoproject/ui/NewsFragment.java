@@ -1,5 +1,6 @@
 package com.phl.emoproject.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,11 +34,10 @@ public class NewsFragment extends RoboFragment implements
     ListView newsLv;
     String loginId;
     NewsListAdapter newsListAdapter;
+    Activity activity;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -62,6 +62,18 @@ public class NewsFragment extends RoboFragment implements
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -71,7 +83,7 @@ public class NewsFragment extends RoboFragment implements
     @Override
     public void onRefresh() {
         if (loginId == null) {
-            SharedPreferences sp = getActivity().getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences sp = activity.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
             loginId = sp.getString(Constans.LOGIN_ID, "");
         }
 
@@ -95,13 +107,13 @@ public class NewsFragment extends RoboFragment implements
             if (newsListListGenericClass.getMessage().getReturnCode() == 0) {
                 //  2015/10/10 Set Adapter
                 if (newsListAdapter == null) {
-                    newsListAdapter = new NewsListAdapter(getActivity(), newsListListGenericClass.getJsonList());
+                    newsListAdapter = new NewsListAdapter(activity, newsListListGenericClass.getJsonList());
                     newsLv.setAdapter(newsListAdapter);
                     newsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             NewsList item = (NewsList)adapterView.getItemAtPosition(i);
-                            Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
+                            Intent intent = new Intent(activity, NewsDetailActivity.class);
                             intent.putExtra("id", item.getId());
                             startActivity(intent);
                         }

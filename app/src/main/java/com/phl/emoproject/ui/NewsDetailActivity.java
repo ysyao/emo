@@ -4,6 +4,8 @@ package com.phl.emoproject.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
@@ -15,7 +17,14 @@ import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
 import com.phl.emoproject.utils.ToolbarUtils;
 
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 
 import roboguice.activity.RoboActionBarActivity;
 import roboguice.inject.ContentView;
@@ -60,8 +69,19 @@ public class NewsDetailActivity extends RoboActionBarActivity{
 //                } else {
 //                    webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 //                }
-                webView.loadData(getHtmlData(newsDetail.getJsonObject().getContent()), "text/html; charset=utf-8", "utf-8");
+                // TODO: 2015/10/11 unicode string
+//                String html = forceUtf8Coding(newsDetail.getJsonObject().getContent());
+                String var =newsDetail.getJsonObject().getContent().replaceAll("(\\%u)", "\\\\u");
+                String html = org.apache.commons.lang.StringEscapeUtils.unescapeJava(var);
+//                Log.d("ssssssssssss", StringEscapeUtils.unescapeJava("\u6768"));
+
+                webView.loadData(getHtmlData(forceUtf8Coding(html)), "text/html; charset=utf-8", "utf-8");
+
             }
+        }
+        private final Charset UTF_8 = Charset.forName("UTF-8");
+        private String forceUtf8Coding(String input) {
+            return new String(input.getBytes(UTF_8), UTF_8);
         }
 
         @Override

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -73,45 +74,50 @@ public abstract class BaseAsyncHttpResponseHandler<T> extends AsyncHttpResponseH
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     bis, "UTF-8"), BUFFER_SIZE);
 
-            XmlPullParser parser = Xml.newPullParser();
-            String s = "";
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(reader);
-//            parser.nextTag();
+//            XmlPullParser parser = Xml.newPullParser();
+//            String s = "";
+//            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+//            parser.setInput(reader);
+////            parser.nextTag();
+//
+//            int event = parser.getEventType();
+//            String text = "";
+//            while (event != XmlPullParser.END_DOCUMENT)
+//            {
+//                String name=parser.getName();
+//                switch (event){
+//                    case XmlPullParser.START_TAG:
+//                        break;
+//                    case XmlPullParser.TEXT:
+//                        text = parser.getText();
+//                        break;
+//                    case XmlPullParser.END_TAG:
+//                        if(name.equals("string")){
+//                            s = text;
+//                        }
+//                        break;
+//                }
+//                event = parser.next();
+//            }
+//            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            StringBuilder builder = new StringBuilder();
+            String aux = "";
 
-            int event = parser.getEventType();
-            String text = "";
-            while (event != XmlPullParser.END_DOCUMENT)
-            {
-                String name=parser.getName();
-                switch (event){
-                    case XmlPullParser.START_TAG:
-                        break;
-                    case XmlPullParser.TEXT:
-                        text = parser.getText();
-                        break;
-                    case XmlPullParser.END_TAG:
-                        if(name.equals("string")){
-                            s = text;
-                        }
-                        break;
-                }
-                event = parser.next();
+            while ((aux = reader.readLine()) != null) {
+                builder.append(aux);
             }
+            String text = builder.toString();
 
-            Log.d("ssssssssssssssssssss", s.trim());
+            Log.d("ssssssssssssssss",text);
             Gson gson = new Gson();
             if (listType == null) {
-                return gson.fromJson(s.trim(), type);
+                return gson.fromJson(text, type);
+            } else {
+                JsonReader jsonReader = new JsonReader(reader);
+                if (jsonReader.peek() == BEGIN_ARRAY) {
+                    return gson.fromJson(reader, listType);
+                }
             }
-//            else {
-//                JsonReader jsonReader = new JsonReader(reader);
-//                if (jsonReader.peek() == BEGIN_ARRAY) {
-//                    return gson.fromJson(s, listType);
-//                }
-//            }
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {

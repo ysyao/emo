@@ -1,6 +1,8 @@
 package com.phl.emoproject.pojo;
 
 
+import com.google.gson.annotations.SerializedName;
+
 public class NewsDetail {
     public static class NewsInfo {
         private String id;
@@ -51,8 +53,11 @@ public class NewsDetail {
             this.fileUrl = fileUrl;
         }
     }
+    @SerializedName("jsonObject")
     private NewsInfo jsonObject;
+    @SerializedName("files")
     private FileInfo[] files;
+    @SerializedName("message")
     private Message message;
 
     public NewsInfo getJsonObject() {

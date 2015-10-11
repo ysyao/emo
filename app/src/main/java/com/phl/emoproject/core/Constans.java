@@ -6,9 +6,10 @@ public interface Constans {
     String LOGIN_ID = "loginId";
     String PASSWORD = "password";
 
-    String PATH  = "http://oa.ynrjkj.com/mobile/EomWebService.asmx";
+//    String PATH  = "http://oa.ynrjkj.com/mobile/EomWebService.asmx";
+    String PATH  = "http://oa.ynrjkj.com/mobile";
 
-    String LOGIN = PATH + "/Login";
-    String NEWS_LIST = PATH + "/GetNewsList";
-    String NEWS_DETAIL = PATH + "/GetNewInfo";
+    String LOGIN = PATH + "/login.aspx";
+    String NEWS_LIST = PATH + "/getNewsList.aspx";
+    String NEWS_DETAIL = PATH + "/getNewInfo.aspx";
 }
