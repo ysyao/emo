@@ -35,7 +35,7 @@ public class HomeActivity extends RoboActionBarActivity implements
         super.onCreate(savedInstanceState);
         ToolbarUtils.normalSetting(this, toolbar);
         ToolbarUtils.setCenterTitle(toolbar, "首页");
-        ToolbarUtils.setLeftTitleEnable(toolbar, false);
+        ToolbarUtils.setLeftTitleEnable(this, toolbar, false);
         newsTv.setOnTextViewClickedListener(this);
         meTv.setOnTextViewClickedListener(this);
         homeTv.setOnTextViewClickedListener(this);

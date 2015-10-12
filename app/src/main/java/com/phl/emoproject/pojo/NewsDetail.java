@@ -3,6 +3,8 @@ package com.phl.emoproject.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class NewsDetail {
     public static class NewsInfo {
         private String id;
@@ -56,7 +58,7 @@ public class NewsDetail {
     @SerializedName("jsonObject")
     private NewsInfo jsonObject;
     @SerializedName("files")
-    private FileInfo[] files;
+    private List<FileInfo> files;
     @SerializedName("message")
     private Message message;
 
@@ -68,11 +70,11 @@ public class NewsDetail {
         this.jsonObject = jsonObject;
     }
 
-    public FileInfo[] getFiles() {
+    public List<FileInfo> getFiles() {
         return files;
     }
 
-    public void setFiles(FileInfo[] files) {
+    public void setFiles(List<FileInfo> files) {
         this.files = files;
     }
 

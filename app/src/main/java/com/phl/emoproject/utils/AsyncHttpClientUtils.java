@@ -40,7 +40,7 @@ public class AsyncHttpClientUtils {
         params.put("id", id);
 //        client.get(context, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
 //        Log.d("ssssssssssss", client.getUrlWithQueryString(true, Constans.NEWS_DETAIL, params));
-        return getRequest(context, client, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
+        return postRequest(context, client, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
     }
 
     public static AsyncHttpClient postRequest(Context context, AsyncHttpClient client, String url, RequestParams params, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {

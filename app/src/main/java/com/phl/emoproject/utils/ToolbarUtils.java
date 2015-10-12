@@ -1,6 +1,7 @@
 package com.phl.emoproject.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -8,21 +9,21 @@ import android.widget.TextView;
 
 import com.phl.emoproject.R;
 
-/**
- * Created by JimmyandHurry on 2015/10/7.
- */
 public class ToolbarUtils {
     public static void normalSetting(ActionBarActivity context, Toolbar toolbar) {
         ToolbarUtils.setToolbarInsteadOfActionBar(context, toolbar);
-        ToolbarUtils.finishAcitivityAsNavigationIconClicked(toolbar, context);
+//        ToolbarUtils.finishAcitivityAsNavigationIconClicked(toolbar, context);
     }
     /**
      * 将默认的action bar设置为不可用，然后将自定义的toolbar设置成为action bar
      * @param context activity
      */
     public static void setToolbarInsteadOfActionBar(ActionBarActivity context, Toolbar toolbar) {
-        context.setSupportActionBar(toolbar);
-        context.getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        context.setSupportActionBar(toolbar);
+//        context.getSupportActionBar().setDisplayUseLogoEnabled(false);
+//        context.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        context.getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        context.getSupportActionBar().setDisplayShowHomeEnabled(false);
     }
 
     /**
@@ -38,18 +39,24 @@ public class ToolbarUtils {
         });
     }
 
-    public static TextView setLeftTitleEnable(Toolbar toolbar, boolean isVisible) {
+    public static TextView setLeftTitleEnable(final Activity context, Toolbar toolbar, boolean isVisible) {
         TextView v = (TextView)toolbar.findViewById(R.id.left_title);
-        if (v.getVisibility() == View.GONE && isVisible) {
+        if (isVisible) {
             v.setVisibility(View.VISIBLE);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    context.finish();
+                }
+            });
         } else if (v.getVisibility() == View.VISIBLE && !isVisible){
             v.setVisibility(View.GONE);
         }
         return v;
     }
 
-    public static void setLeftTitle(Toolbar toolbar, String title) {
-        TextView v = setLeftTitleEnable(toolbar, true);
+    public static void setLeftTitle(Activity context, Toolbar toolbar, String title) {
+        TextView v = setLeftTitleEnable(context, toolbar, true);
         v.setText(title);
     }
 

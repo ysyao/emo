@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="0dp"
     android:id="@+id/toolbar"
     android:paddingLeft="0dp"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
     android:background="@color/blue"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize">
     <TextView
         android:id="@+id/left_title"
-        android:drawableLeft="@drawable/left_arrow"
+        android:drawableLeft="@drawable/ic_action_hardware_keyboard_arrow_left"
         android:layout_gravity="left|center_vertical"
         android:gravity="center"
-        android:paddingLeft="0dp"
+        android:paddingLeft="4dp"
         android:layout_marginLeft="0dp"
         android:paddingRight="8dp"
         android:layout_width="wrap_content"
@@ -19,7 +22,7 @@
         android:minHeight="30dp"
         android:text="返回"
         android:textColor="@android:color/white"
-        android:textSize="17sp"/>
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/center_title"

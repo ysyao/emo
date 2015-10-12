@@ -8,14 +8,17 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
+import com.phl.emoproject.home.NewsFileAdapter;
 import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
 import com.phl.emoproject.utils.ToolbarUtils;
+import com.phl.emoproject.widget.WrapContentHeightListView;
 
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -38,13 +41,15 @@ public class NewsDetailActivity extends RoboActionBarActivity{
     WebView webView;
     @InjectView(R.id.indicator)
     ProgressBar indicator;
+    @InjectView(R.id.files_listview)
+    WrapContentHeightListView filesListView;
+    NewsFileAdapter newsFileAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ToolbarUtils.normalSetting(this, toolbar);
-        ToolbarUtils.setLeftTitleEnable(toolbar, true);
+        ToolbarUtils.setLeftTitleEnable(this, toolbar, true);
         ToolbarUtils.setCenterTitle(toolbar, "新闻详情");
 
         Intent intent = getIntent();
@@ -69,14 +74,27 @@ public class NewsDetailActivity extends RoboActionBarActivity{
 //                } else {
 //                    webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 //                }
-                // TODO: 2015/10/11 unicode string
+                //  2015/10/11 unicode string
 //                String html = forceUtf8Coding(newsDetail.getJsonObject().getContent());
                 String var =newsDetail.getJsonObject().getContent().replaceAll("(\\%u)", "\\\\u");
                 String html = org.apache.commons.lang.StringEscapeUtils.unescapeJava(var);
 //                Log.d("ssssssssssss", StringEscapeUtils.unescapeJava("\u6768"));
 
-                webView.loadData(getHtmlData(forceUtf8Coding(html)), "text/html; charset=utf-8", "utf-8");
+//                webView.loadData(getHtmlData(forceUtf8Coding(html)), "text/html; charset=utf-8", "utf-8");
+                webView.loadData(html, "text/html; charset=utf-8", "utf-8");
+                if(newsFileAdapter == null) {
+                    newsFileAdapter = new NewsFileAdapter(NewsDetailActivity.this, newsDetail.getFiles());
+                    filesListView.setAdapter(newsFileAdapter);
+                    filesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            NewsDetail.FileInfo fileInfo = (NewsDetail.FileInfo)adapterView.getItemAtPosition(i);
 
+                        }
+                    });
+                } else {
+                    newsFileAdapter.updateAdapter(newsDetail.getFiles());
+                }
             }
         }
         private final Charset UTF_8 = Charset.forName("UTF-8");
