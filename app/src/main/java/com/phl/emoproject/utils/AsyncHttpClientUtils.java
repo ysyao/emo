@@ -2,6 +2,7 @@ package com.phl.emoproject.utils;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -53,5 +54,19 @@ public class AsyncHttpClientUtils {
         Log.d("ssssssssssss", client.getUrlWithQueryString(true, url, params));
         client.get(context, url, params, baseAsyncHttpResponseHandler);
         return client;
+    }
+
+    public static AsyncHttpClient postTaskList(Context context, String pageNo, String pageSize, String taskType, String status, String keyWords, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String loginId = sp.getString(Constans.LOGIN_ID, "");
+        params.put("LoginId", loginId);
+        params.put("pageNo", pageNo);
+        params.put("pageSize", pageSize);
+        params.put("taskType", taskType);
+        params.put("status", status);
+        params.put("keyWords", keyWords);
+        return postRequest(context, client, Constans.TASK_LIST, params, baseAsyncHttpResponseHandler);
     }
 }

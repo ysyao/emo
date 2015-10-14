@@ -1,6 +1,7 @@
 package com.phl.emoproject.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.ViewPager;
@@ -24,16 +25,22 @@ public class HomePageListFragment extends RoboFragment implements
         ViewPager.OnPageChangeListener{
     @InjectView(R.id.indicator)
     TabPageIndicator tabPageIndicator;
-    @InjectView(R.id.viewpager)
-    NonSwipeableViewPager viewPager;
+    @InjectView(R.id.viewpager_list)
+    ViewPager viewPager;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        viewPager.setAdapter(new HomePageListFragmentAdapter(getChildFragmentManager()));
         viewPager.setOffscreenPageLimit(4);
-        viewPager.setAdapter(new HomePageListFragmentAdapter(getFragmentManager()));
         tabPageIndicator.setViewPager(viewPager);
         tabPageIndicator.setOnPageChangeListener(this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(1, false);
+            }
+        }, 500);
     }
 
     @Nullable

@@ -14,7 +14,6 @@
         android:drawableLeft="@drawable/ic_action_hardware_keyboard_arrow_left"
         android:layout_gravity="left|center_vertical"
         android:gravity="center"
-        android:paddingLeft="4dp"
         android:layout_marginLeft="0dp"
         android:paddingRight="8dp"
         android:layout_width="wrap_content"

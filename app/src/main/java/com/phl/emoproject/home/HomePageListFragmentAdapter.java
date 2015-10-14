@@ -16,7 +16,17 @@ public class HomePageListFragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-         return new HomePageListItemFragment();
+        switch (position) {
+            case 0:
+                return new Fragment();
+            case 1:
+                return HomePageListItemFragment.newInstance(HomeListType.DAIBAN);
+            case 2:
+                return HomePageListItemFragment.newInstance(HomeListType.BEIAN);
+            case 3:
+                return new Fragment();
+        }
+        return null;
     }
 
     @Override

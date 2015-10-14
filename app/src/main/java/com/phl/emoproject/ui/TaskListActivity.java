@@ -1,11 +1,11 @@
 package com.phl.emoproject.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -16,22 +16,27 @@ import com.phl.emoproject.home.TaskListAdapter;
 import com.phl.emoproject.pojo.ListGenericClass;
 import com.phl.emoproject.pojo.TaskList;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
+import com.phl.emoproject.utils.ToolbarUtils;
 import com.phl.emoproject.utils.ViewUtils;
 
 import org.apache.http.Header;
 
-import roboguice.fragment.RoboFragment;
+import roboguice.activity.RoboActionBarActivity;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-
-public class HomePageListItemFragment extends RoboFragment {
+@ContentView(R.layout.activity_task_list)
+public class TaskListActivity extends RoboActionBarActivity implements SwipeRefreshLayout.OnRefreshListener{
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
     @InjectView(R.id.list_page_listview)
     ListView listView;
     @InjectView(R.id.no_data)
     View noData;
+    @InjectView(R.id.swipe_latyout)
+    SwipeRefreshLayout swipeRefreshLayout;
     View moreData;
     HomeListType type;
-    Activity activity;
     int pageNo = 1;
     int pageSize = 12;
     String taskType = "";
@@ -39,41 +44,31 @@ public class HomePageListItemFragment extends RoboFragment {
     String keyWords;
     TaskListAdapter taskListAdapter;
 
-    public static HomePageListItemFragment newInstance(HomeListType type) {
-        HomePageListItemFragment homePageListItemFragment = new HomePageListItemFragment();
-        homePageListItemFragment.type = type;
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("type", type);
-        homePageListItemFragment.setArguments(bundle);
-        return homePageListItemFragment;
-    }
-
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            type = (HomeListType)getArguments().getSerializable("type");
-        }
-    }
+        ToolbarUtils.normalSetting(this, toolbar);
+        ToolbarUtils.setLeftTitleEnable(this, toolbar, true);
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home_page_list_item, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        listView.setEmptyView(noData);
-        moreData = ViewUtils.createListViewFooterView(activity);
+        moreData = ViewUtils.createListViewFooterView(this);
         ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
+
+        Intent i = getIntent();
+        type = (HomeListType)i.getSerializableExtra("type");
+        if (savedInstanceState != null) {
+            type = (HomeListType)savedInstanceState.getSerializable("type");
+        }
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorScheme(R.color.blue,
+                R.color.greenyellow,
+                R.color.orange, R.color.red);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
         moreData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,16 +76,13 @@ public class HomePageListItemFragment extends RoboFragment {
             }
         });
         listView.addFooterView(moreData);
-        switch (type) {
-            case DAIBAN:
-                taskType="1";
-                postTaskListRequest(ListViewOper.REFRESH);
-                break;
-            case BEIAN:
-                taskType="4";
-                postTaskListRequest(ListViewOper.REFRESH);
-                break;
-        }
+        listView.setEmptyView(noData);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("type", type);
     }
 
     private void postTaskListRequest(ListViewOper listViewOper) {
@@ -103,7 +95,23 @@ public class HomePageListItemFragment extends RoboFragment {
                 pageNo += 1;
                 break;
         }
-        AsyncHttpClientUtils.postTaskList(getActivity(), String.valueOf(pageNo), String.valueOf(pageSize), taskType, status, keyWords, new TaskListResponse(listViewOper));
+        AsyncHttpClientUtils.postTaskList(this, String.valueOf(pageNo), String.valueOf(pageSize), taskType, status, keyWords, new TaskListResponse(listViewOper));
+    }
+
+    @Override
+    public void onRefresh() {
+        switch (type) {
+            case DAIBAN:
+                ToolbarUtils.setCenterTitle(toolbar, "我的待办");
+                taskType="1";
+                postTaskListRequest(ListViewOper.REFRESH);
+                break;
+            case BEIAN:
+                ToolbarUtils.setCenterTitle(toolbar, "我的备案");
+                taskType="4";
+                postTaskListRequest(ListViewOper.REFRESH);
+                break;
+        }
     }
 
     enum ListViewOper {
@@ -120,10 +128,11 @@ public class HomePageListItemFragment extends RoboFragment {
         @Override
         public void onSuccess(int statusCode, Header[] headers, ListGenericClass<TaskList> taskListListGenericClass) {
             ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
+            swipeRefreshLayout.setRefreshing(false);
             switch (listViewOper) {
                 case REFRESH:
                     if (taskListAdapter == null) {
-                        taskListAdapter = new TaskListAdapter(getActivity(), taskListListGenericClass.getJsonList());
+                        taskListAdapter = new TaskListAdapter(getApplicationContext(), taskListListGenericClass.getJsonList());
                         listView.setAdapter(taskListAdapter);
                     } else {
                         taskListAdapter.updateAdapter(taskListListGenericClass.getJsonList());
@@ -135,7 +144,7 @@ public class HomePageListItemFragment extends RoboFragment {
                         return;
                     }
                     if (taskListAdapter == null) {
-                        taskListAdapter = new TaskListAdapter(getActivity(), taskListListGenericClass.getJsonList());
+                        taskListAdapter = new TaskListAdapter(getApplicationContext(), taskListListGenericClass.getJsonList());
                         listView.setAdapter(taskListAdapter);
                     } else {
                         taskListAdapter.addMoreData(taskListListGenericClass.getJsonList());
@@ -147,8 +156,8 @@ public class HomePageListItemFragment extends RoboFragment {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            swipeRefreshLayout.setRefreshing(false);
             ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
         }
     }
-
 }
