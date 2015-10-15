@@ -13,4 +13,5 @@ public interface Constans {
     String NEWS_LIST = PATH + "/getNewsList.aspx";
     String NEWS_DETAIL = PATH + "/getNewInfo.aspx";
     String TASK_LIST = PATH + "/getTaskList.aspx";
+    String TASK_DETAIL = PATH + "/getTranactFlowForm.aspx";
 }

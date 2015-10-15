@@ -1,53 +1,53 @@
 package com.phl.emoproject.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
+import com.phl.emoproject.core.Constans;
+import com.phl.emoproject.home.HomeListType;
 import com.phl.emoproject.home.NewsListAdapter;
 import com.phl.emoproject.pojo.ListGenericClass;
 import com.phl.emoproject.pojo.NewsList;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
-import com.phl.emoproject.core.Constans;
+import com.phl.emoproject.utils.ToolbarUtils;
+import com.phl.emoproject.utils.ViewUtils;
 
 import org.apache.http.Header;
 
-import roboguice.fragment.RoboFragment;
+import roboguice.activity.RoboActionBarActivity;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-public class NewsFragment extends RoboFragment implements
-        SwipeRefreshLayout.OnRefreshListener{
-    @InjectView(R.id.swipe_container)
+@ContentView(R.layout.activity_news_list)
+public class NewsListActivity extends RoboActionBarActivity implements SwipeRefreshLayout.OnRefreshListener{
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+    @InjectView(R.id.list_page_listview)
+    ListView listView;
+    @InjectView(R.id.no_data)
+    View noData;
+    @InjectView(R.id.swipe_latyout)
     SwipeRefreshLayout swipeRefreshLayout;
-    @InjectView(R.id.news_listview)
-    ListView newsLv;
     String loginId;
     NewsListAdapter newsListAdapter;
-    Activity activity;
-
-    public static NewsFragment newInstance() {
-        NewsFragment fragment = new NewsFragment();
-        return fragment;
-    }
-
-    public NewsFragment() {
-        // Required empty public constructor
-    }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ToolbarUtils.normalSetting(this, toolbar);
+        ToolbarUtils.setLeftTitleEnable(this, toolbar, true);
+        ToolbarUtils.setCenterTitle(toolbar, "新闻列表");
+
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorScheme(R.color.blue,
                 R.color.greenyellow,
@@ -59,41 +59,23 @@ public class NewsFragment extends RoboFragment implements
                 onRefresh();
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = activity;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news, container, false);
+        listView.setEmptyView(noData);
     }
 
     @Override
     public void onRefresh() {
         if (loginId == null) {
-            SharedPreferences sp = activity.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences sp = getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
             loginId = sp.getString(Constans.LOGIN_ID, "");
         }
 
-        AsyncHttpClientUtils.postNewsList(getActivity(), loginId, new NewsListResponse());
+        AsyncHttpClientUtils.postNewsList(this, loginId, new NewsListResponse());
     }
 
     @Override
-    public void onStop() {
+    protected void onStop() {
         super.onStop();
-        AsyncHttpClientUtils.cancelRequest(activity);
+        AsyncHttpClientUtils.cancelRequest(this);
     }
 
     private class NewsListResponse extends BaseAsyncHttpResponseHandler<ListGenericClass<NewsList>> {
@@ -113,13 +95,13 @@ public class NewsFragment extends RoboFragment implements
             if (newsListListGenericClass.getMessage().getReturnCode() == 0) {
                 //  2015/10/10 Set Adapter
                 if (newsListAdapter == null) {
-                    newsListAdapter = new NewsListAdapter(activity, newsListListGenericClass.getJsonList());
-                    newsLv.setAdapter(newsListAdapter);
-                    newsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    newsListAdapter = new NewsListAdapter(getApplicationContext(), newsListListGenericClass.getJsonList());
+                    listView.setAdapter(newsListAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             NewsList item = (NewsList)adapterView.getItemAtPosition(i);
-                            Intent intent = new Intent(activity, NewsDetailActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), NewsDetailActivity.class);
                             intent.putExtra("id", item.getId());
                             startActivity(intent);
                         }
@@ -131,5 +113,4 @@ public class NewsFragment extends RoboFragment implements
         }
 
     }
-
 }

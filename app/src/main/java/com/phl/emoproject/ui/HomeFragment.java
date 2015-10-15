@@ -15,6 +15,7 @@ import com.phl.emoproject.R;
 import com.phl.emoproject.home.HomeFragmentGridViewAdapter;
 import com.phl.emoproject.home.HomeListType;
 import com.phl.emoproject.pojo.HomeGridViewItem;
+import com.phl.emoproject.pojo.NewsList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,11 @@ public class HomeFragment extends RoboFragment implements AdapterView.OnItemClic
                 break;
             case 1:
                 intent = new Intent(activity, TaskListActivity.class);
+                intent.putExtra("type", HomeListType.BEIAN);
+                startActivity(intent);
+                break;
+            case 2:
+                intent = new Intent(activity, NewsListActivity.class);
                 intent.putExtra("type", HomeListType.BEIAN);
                 startActivity(intent);
                 break;

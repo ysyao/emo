@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -15,6 +16,7 @@ import com.phl.emoproject.home.HomeListType;
 import com.phl.emoproject.home.TaskListAdapter;
 import com.phl.emoproject.pojo.ListGenericClass;
 import com.phl.emoproject.pojo.TaskList;
+import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
 import com.phl.emoproject.utils.ToolbarUtils;
 import com.phl.emoproject.utils.ViewUtils;
@@ -26,7 +28,15 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_task_list)
-public class TaskListActivity extends RoboActionBarActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class TaskListActivity extends RoboActionBarActivity implements
+        SwipeRefreshLayout.OnRefreshListener,
+        AdapterView.OnItemClickListener {
+
+
+    enum ListViewOper {
+        REFRESH,MORE
+    }
+
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
     @InjectView(R.id.list_page_listview)
@@ -77,6 +87,7 @@ public class TaskListActivity extends RoboActionBarActivity implements SwipeRefr
         });
         listView.addFooterView(moreData);
         listView.setEmptyView(noData);
+        listView.setOnItemClickListener(this);
     }
 
     @Override
@@ -95,7 +106,14 @@ public class TaskListActivity extends RoboActionBarActivity implements SwipeRefr
                 pageNo += 1;
                 break;
         }
-        AsyncHttpClientUtils.postTaskList(this, String.valueOf(pageNo), String.valueOf(pageSize), taskType, status, keyWords, new TaskListResponse(listViewOper));
+        AsyncHttpClientUtils.postTaskList(
+                this,
+                String.valueOf(pageNo),
+                String.valueOf(pageSize),
+                taskType,
+                status,
+                keyWords,
+                new TaskListResponse(listViewOper));
     }
 
     @Override
@@ -114,9 +132,20 @@ public class TaskListActivity extends RoboActionBarActivity implements SwipeRefr
         }
     }
 
-    enum ListViewOper {
-        REFRESH,MORE
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        TaskList task = (TaskList)adapterView.getItemAtPosition(i);
+        Intent intent = new Intent(this, TaskDetailActivity.class);
+        intent.putExtra("task", task);
+        startActivity(intent);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AsyncHttpClientUtils.cancelRequest(this);
+    }
+
     private class TaskListResponse extends BaseAsyncHttpResponseHandler<ListGenericClass<TaskList>> {
         ListViewOper listViewOper;
         public TaskListResponse(ListViewOper listViewOper) {

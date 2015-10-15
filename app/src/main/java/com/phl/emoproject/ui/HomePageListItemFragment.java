@@ -1,11 +1,13 @@
 package com.phl.emoproject.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -24,7 +26,7 @@ import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
 
-public class HomePageListItemFragment extends RoboFragment {
+public class HomePageListItemFragment extends RoboFragment implements AdapterView.OnItemClickListener{
     @InjectView(R.id.list_page_listview)
     ListView listView;
     @InjectView(R.id.no_data)
@@ -81,6 +83,7 @@ public class HomePageListItemFragment extends RoboFragment {
             }
         });
         listView.addFooterView(moreData);
+        listView.setOnItemClickListener(this);
         switch (type) {
             case DAIBAN:
                 taskType="1";
@@ -103,7 +106,37 @@ public class HomePageListItemFragment extends RoboFragment {
                 pageNo += 1;
                 break;
         }
-        AsyncHttpClientUtils.postTaskList(getActivity(), String.valueOf(pageNo), String.valueOf(pageSize), taskType, status, keyWords, new TaskListResponse(listViewOper));
+        AsyncHttpClientUtils.postTaskList(getActivity(),
+                String.valueOf(pageNo),
+                String.valueOf(pageSize),
+                taskType,
+                status,
+                keyWords,
+                new TaskListResponse(listViewOper));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        AsyncHttpClientUtils.cancelRequest(activity);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (type) {
+            case DAIBAN:
+                TaskList task = (TaskList)adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(activity, TaskDetailActivity.class);
+                intent.putExtra("task", task);
+                startActivity(intent);
+                break;
+            case BEIAN:
+                TaskList task1 = (TaskList)adapterView.getItemAtPosition(i);
+                Intent intent1 = new Intent(activity, TaskDetailActivity.class);
+                intent1.putExtra("task", task1);
+                startActivity(intent1);
+                break;
+        }
     }
 
     enum ListViewOper {

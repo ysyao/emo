@@ -121,6 +121,8 @@ public class LoginActivity extends RoboActionBarActivity{
                 }
 
                 finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "登录失败", Toast.LENGTH_LONG).show();
             }
         }
 

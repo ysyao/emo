@@ -58,6 +58,12 @@ public class NewsDetailActivity extends RoboActionBarActivity{
         AsyncHttpClientUtils.postNewsDetail(this, id, new PostNewsDetail());
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AsyncHttpClientUtils.cancelRequest(this);
+    }
+
     private class PostNewsDetail extends BaseAsyncHttpResponseHandler<NewsDetail> {
         public PostNewsDetail() {
             super();

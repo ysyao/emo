@@ -11,6 +11,7 @@
         android:layout_centerInParent="true"
         android:id="@+id/list_page_listview"
         android:dividerHeight="@dimen/activity_ui_margin_medium"
+        android:listSelector="@drawable/list_selector_bg"
         android:divider="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/list_selector_bg_white"
     android:gravity="center_vertical"
     android:layout_height="match_parent">
     <LinearLayout
@@ -9,7 +9,6 @@
         android:orientation="vertical"
         android:layout_width="0dp"
         android:padding="@dimen/activity_ui_margin_medium"
-        android:background="@color/white"
         android:gravity="center_vertical"
         android:layout_height="wrap_content">
     <TextView
@@ -25,7 +24,6 @@
         android:maxLines="1"
         android:id="@+id/item_time"
         android:gravity="center_vertical"
-        android:background="@color/white"
         android:text=""
         android:layout_marginTop="@dimen/activity_ui_margin_small"
         android:textSize="12sp"

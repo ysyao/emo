@@ -1,7 +1,9 @@
 package com.phl.emoproject.pojo;
 
 
-public class TaskList {
+import java.io.Serializable;
+
+public class TaskList implements Serializable{
     private String taskId;
     private String taskCode;
     private String category;
