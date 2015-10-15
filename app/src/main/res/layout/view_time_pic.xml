@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="300dp"
+    android:gravity="center"
+    android:padding="@dimen/activity_ui_margin_small"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/date_name"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:textSize="15sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <TextView
+        android:drawableLeft="@drawable/ic_action_action_alarm"
+        android:gravity="left|center_vertical"
+        android:text=" "
+        android:background="@drawable/list_selector_bg"
+        android:id="@+id/date_value"
+        android:textColor="@color/dark_silver"
+        android:textSize="14sp"
+        android:layout_marginLeft="@dimen/activity_ui_margin_medium"
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+</LinearLayout>

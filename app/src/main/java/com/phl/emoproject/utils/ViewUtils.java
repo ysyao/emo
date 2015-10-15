@@ -33,4 +33,6 @@ public class ViewUtils {
         TextView title = (TextView) footerView.findViewById(R.id.title_footer);
         title.setText(text);
     }
+
+
 }

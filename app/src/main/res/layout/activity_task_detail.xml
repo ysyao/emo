@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <include layout="@layout/layout_toolbar" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:paddingLeft="@dimen/activity_ui_margin_large"
+            android:paddingRight="@dimen/activity_ui_margin_large"
+            android:paddingTop="@dimen/activity_ui_margin_large"
+            android:paddingBottom="@dimen/activity_ui_margin_large"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/content"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:textColor="@color/blue_home"
+                android:textSize="15sp"
+                android:drawableLeft="@drawable/files"
+                android:gravity="center_vertical"
+                android:text="附件"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.phl.emoproject.widget.WrapContentHeightListView
+                android:id="@+id/files_listview"
+                android:dividerHeight="@dimen/activity_ui_margin_small"
+                android:divider="@android:color/transparent"
+                android:layout_marginTop="@dimen/activity_ui_margin_medium"
+                android:background="@color/gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:background="@color/silver"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"/>
+
+                <TextView
+                    android:layout_marginLeft="@dimen/activity_ui_margin_small"
+                    android:layout_marginRight="@dimen/activity_ui_margin_small"
+                    android:text="审批意见"
+                    android:textSize="15sp"
+                    android:textColor="@color/blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_weight="1"
+                    android:background="@color/silver"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"/>
+            </LinearLayout>
+
+            <com.phl.emoproject.widget.WrapContentHeightListView
+                android:id="@+id/nodes_listview"
+                android:dividerHeight="@dimen/activity_ui_margin_small"
+                android:divider="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </ScrollView>
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/indicator"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

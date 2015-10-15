@@ -50,4 +50,8 @@
         <item name="android:textColor">@color/dark_silver</item>
         <item name="android:typeface">monospace</item>
     </style>
+
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/bg_check_box</item>
+    </style>
 </resources>

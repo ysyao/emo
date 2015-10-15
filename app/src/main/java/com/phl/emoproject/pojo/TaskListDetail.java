@@ -103,6 +103,30 @@ public class TaskListDetail {
         private String id;
         private String name;
         private String fileUrl;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getFileUrl() {
+            return fileUrl;
+        }
+
+        public void setFileUrl(String fileUrl) {
+            this.fileUrl = fileUrl;
+        }
     }
     private List<Control> controls;
     private List<HistoryNodes> histotyNodes;
