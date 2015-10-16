@@ -5,15 +5,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
+import com.phl.emoproject.core.Constans;
+import com.phl.emoproject.core.EmoApplication;
 import com.phl.emoproject.home.DetailFileAdapter;
 import com.phl.emoproject.home.HistoryNodesAdapter;
+import com.phl.emoproject.pojo.ActionListHolder;
+import com.phl.emoproject.pojo.Message;
 import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.pojo.TaskList;
 import com.phl.emoproject.pojo.TaskListDetail;
@@ -31,7 +38,8 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_task_detail)
-public class TaskDetailActivity extends RoboActionBarActivity {
+public class TaskDetailActivity extends RoboActionBarActivity implements
+        View.OnClickListener{
     TaskList task;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -45,9 +53,13 @@ public class TaskDetailActivity extends RoboActionBarActivity {
     WrapContentHeightListView nodesListView;
     @InjectView(R.id.scrollView)
     ScrollView scrollView;
+    @InjectView(R.id.idea_control)
+    ViewGroup ideaContainer;
 
     DetailFileAdapter detailFileAdapter;
     HistoryNodesAdapter historyNodesAdapter;
+
+    ActionListHolder actionListHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +74,7 @@ public class TaskDetailActivity extends RoboActionBarActivity {
             task = (TaskList)savedInstanceState.getSerializable("task");
         }
 
-        indicator.setVisibility(View.VISIBLE);
-        AsyncHttpClientUtils.postTaskDetail(this,
-                task.getTaskId(),
-                task.getNodeId(),
-                task.getHistoryNodeId(),
-                task.getDiscussid(),
-                new TaskDetailResponse());
+        postAllData();
     }
 
     @Override
@@ -83,12 +89,125 @@ public class TaskDetailActivity extends RoboActionBarActivity {
         AsyncHttpClientUtils.cancelRequest(this);
     }
 
-    private void generateViewByControls(List<TaskListDetail.Control> controls) {
-        for (TaskListDetail.Control control : controls) {
-            TaskDetailUtils.generateViewByControl(this, control,container);
+    @Override
+    public void onClick(View view) {
+        TaskListDetail.Control control = (TaskListDetail.Control)view.getTag();
+        String id = control.getId();
+        if (id.equals("argeeButton")) {
+
+        } else if (id.equals("rejectButton")) {
+
+        } else if (id.equals("consultButton")) {
+            postConsult();
+        } else if (id.equals("assignButton")) {
+
+        } else if (id.equals("submitConsultButton")) {
+
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == Constans.REQUEST_CODE_SEARCH) {
+            View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
+            EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
+            String user = data.getStringExtra("user");
+            String[] values = user.split("#");
+            staff.setText(values[2]);
+            TaskListDetail.Control control = (TaskListDetail.Control)staffRootView.getTag();
+            control.setValue(user);
+            staffRootView.setTag(control);
+        }
+    }
+
+    private void setActionListOnClickListener(View view) {
+        if (view != null) {
+            view.setOnClickListener(this);
+        }
+    }
+
+    /**
+     * 通过control数组建立输入框等ui
+     * @param controls control数组
+     */
+    private void generateViewByControls(List<TaskListDetail.Control> controls) {
+        for (TaskListDetail.Control control : controls) {
+            TaskDetailUtils.generateViewByControl(this, control, container);
+        }
+    }
+
+    /**
+     * 获取全部数据
+     */
+    private void postAllData() {
+        indicator.setVisibility(View.VISIBLE);
+
+        ideaContainer.removeAllViews();
+        container.removeAllViews();
+        AsyncHttpClientUtils.postTaskDetail(this,
+                task.getTaskId(),
+                task.getNodeId(),
+                task.getHistoryNodeId(),
+                task.getDiscussid(),
+                new TaskDetailResponse());
+    }
+    /**
+     * 发起协商
+     */
+    private void postConsult() {
+        indicator.setVisibility(View.VISIBLE);
+        View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
+//        EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
+        //这里需要取tag中的值才比较准确
+        TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
+
+        View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
+        String notice = getNotice(noticeRootView);
+        AsyncHttpClientUtils.postConsult(
+                this,
+                task.getHistoryNodeId(),
+                task.getTitle(),
+                staffControl.getValue(),
+                task.getUrl(),
+                notice,
+                new PostConsult());
+    }
+
+    private void postConsultSuggestion() {
+        indicator.setVisibility(View.VISIBLE);
+        View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
+        String notice = getNotice(noticeRootView);
+
+        AsyncHttpClientUtils.postConsultSuggestion(
+                this,
+                task.getHistoryNodeId(),
+                task.getTitle(),
+                task.getDiscussid(),
+                task.getUrl(),
+                notice,
+                "",
+                new PostConsult());
+    }
+
+    private String getNotice(View noticeRootView) {
+        boolean duanxin = TaskDetailUtils.isNotifyDuanXinSelected(noticeRootView);
+        boolean email = TaskDetailUtils.isNotifyEmailSelected(noticeRootView);
+
+        String notice = "";
+        if (duanxin && !email) {
+            notice = "1";
+        } else if (!duanxin && email) {
+            notice = "2";
+        } else if (duanxin && email) {
+            notice = "12";
+        }
+        return notice;
+    }
+
+    /**
+     * 获取详情数据
+     */
     private class TaskDetailResponse extends BaseAsyncHttpResponseHandler<TaskListDetail> {
         public TaskDetailResponse() {
             super();
@@ -100,7 +219,9 @@ public class TaskDetailActivity extends RoboActionBarActivity {
             indicator.setVisibility(View.GONE);
             if (taskListDetail.getMessage().getReturnCode() == 0) {
                 //将controls设置
-                generateViewByControls(taskListDetail.getControls());
+                List<TaskListDetail.Control> controls = taskListDetail.getControls();
+                EmoApplication.getInstance().setControls(controls);
+                generateViewByControls(controls);
 
                 //将附件设置
                 if(detailFileAdapter == null) {
@@ -126,6 +247,12 @@ public class TaskDetailActivity extends RoboActionBarActivity {
                 }
 
                 //操作按钮
+                actionListHolder = TaskDetailUtils.generateIdeaByControls(TaskDetailActivity.this, taskListDetail.getIdeaControls(), ideaContainer);
+                setActionListOnClickListener(actionListHolder.getApproval());
+                setActionListOnClickListener(actionListHolder.getAssign());
+                setActionListOnClickListener(actionListHolder.getConsult());
+                setActionListOnClickListener(actionListHolder.getReject());
+                setActionListOnClickListener(actionListHolder.getSubmitConsultButton());
 
                 //滑动到顶部
                new Handler().postDelayed(new Runnable() {
@@ -134,6 +261,27 @@ public class TaskDetailActivity extends RoboActionBarActivity {
                        scrollView.scrollTo(0, 0);
                    }
                }, 300);
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            indicator.setVisibility(View.GONE);
+        }
+    }
+
+    private class PostConsult extends BaseAsyncHttpResponseHandler<Message> {
+        public PostConsult() {
+            super();
+            setType(new TypeToken<Message>(){}.getType());
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, Message message) {
+            indicator.setVisibility(View.GONE);
+            if (message.getReturnCode() == 0) {
+                Toast.makeText(TaskDetailActivity.this, message.getValue(), Toast.LENGTH_LONG).show();
+                postAllData();
             }
         }
 

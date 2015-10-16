@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:padding="@dimen/activity_ui_margin_small"
+        android:background="@drawable/bg_squre_white"
+        android:id="@+id/input"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/back_button"
+            android:padding="@dimen/activity_ui_margin_medium"
+            android:text="返回"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    <EditText
+        android:hint="账号或姓名"
+        android:textSize="15sp"
+
+        android:gravity="center_vertical"
+        android:padding="@dimen/activity_ui_margin_small"
+        android:id="@+id/search_input"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_round_search"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:minHeight="30dp"
+        android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:id="@+id/search_button"
+            android:padding="@dimen/activity_ui_margin_medium"
+            android:text="搜索"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/result"
+        android:padding="@dimen/activity_ui_margin_medium"
+        android:layout_below="@+id/indicator"
+        android:textSize="17sp"
+        android:text=""
+        android:background="@drawable/list_selector_bg_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <ProgressBar
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/input"
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

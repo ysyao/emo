@@ -8,13 +8,14 @@
     <TextView
         android:id="@+id/text_field_name"
         android:layout_weight="1"
-        android:gravity="right"
+        android:gravity="right|center_vertical"
         android:textSize="15sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="所属公司"/>
 
     <EditText
+        android:gravity="center_vertical"
         android:id="@+id/text_field_value"
         android:text="云南公司"
         android:textColor="@color/dark_silver"

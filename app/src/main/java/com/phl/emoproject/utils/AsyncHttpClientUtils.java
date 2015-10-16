@@ -71,6 +71,43 @@ public class AsyncHttpClientUtils {
         return postRequest(context, client, Constans.TASK_DETAIL, params, baseAsyncHttpResponseHandler);
     }
 
+    public static AsyncHttpClient postConsult(Context context, String historyNodeId, String name, String toActors, String url, String noticeType, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String loginId = sp.getString(Constans.LOGIN_ID, "");
+        params.put("loginId", loginId);
+        params.put("name", name);
+        params.put("toActors", toActors);
+        params.put("historyNodeId", url);
+        params.put("noticeType", noticeType);
+        params.put("historyNodeId", historyNodeId);
+        return postRequest(context, client, Constans.CONSULT, params, baseAsyncHttpResponseHandler);
+    }
+
+    public static AsyncHttpClient postConsultSuggestion(Context context, String historyNodeId, String name, String discussId, String url, String noticeType, String idea, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String loginId = sp.getString(Constans.LOGIN_ID, "");
+        params.put("loginId", loginId);
+        params.put("name", name);
+        params.put("discussId", discussId);
+        params.put("historyNodeId", url);
+        params.put("noticeType", noticeType);
+        params.put("historyNodeId", historyNodeId);
+        params.put("idea", idea);
+        return postRequest(context, client, Constans.CONSULT, params, baseAsyncHttpResponseHandler);
+    }
+
+    public static AsyncHttpClient postSearchUserScope(Context context, String keyWord, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        params.put("keyWord", keyWord);
+        return postRequest(context, client, Constans.USER_SCOPE, params, baseAsyncHttpResponseHandler);
+    }
+
+
     public static void cancelRequest(Context context) {
         client.cancelRequests(context, true);
     }

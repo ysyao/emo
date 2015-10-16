@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:id="@+id/actionlist_container"
+    android:padding="@dimen/activity_ui_margin_small"
+    android:layout_height="match_parent">
+    <!--<TextView-->
+        <!--android:visibility="gone"-->
+        <!--android:id="@+id/tv"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/bg_button_white"-->
+        <!--android:padding="@dimen/activity_ui_margin_medium"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textColor="@color/blue"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="审批通过"/>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/approval"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/bg_button_white"-->
+        <!--android:padding="@dimen/activity_ui_margin_medium"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textColor="@color/blue"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="审批通过"/>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/reject"-->
+        <!--android:layout_marginLeft="@dimen/activity_ui_margin_small"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/bg_button_white"-->
+        <!--android:padding="@dimen/activity_ui_margin_medium"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textColor="@color/blue"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="驳回"/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/consult"-->
+        <!--android:layout_marginLeft="@dimen/activity_ui_margin_small"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/bg_button_white"-->
+        <!--android:padding="@dimen/activity_ui_margin_medium"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textColor="@color/blue"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="协商"/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/assign"-->
+        <!--android:layout_marginLeft="@dimen/activity_ui_margin_small"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/bg_button_white"-->
+        <!--android:padding="@dimen/activity_ui_margin_medium"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textColor="@color/blue"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="交办"/>-->
+
+
+
+</LinearLayout>

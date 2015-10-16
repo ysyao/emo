@@ -15,7 +15,6 @@
         android:text=""/>
 
     <LinearLayout
-        android:drawableLeft="@drawable/ic_action_action_today"
         android:gravity="left|center_vertical"
         android:text=" "
         android:orientation="horizontal"

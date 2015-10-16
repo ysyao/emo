@@ -33,6 +33,7 @@
                 android:textSize="15sp"
                 android:drawableLeft="@drawable/files"
                 android:gravity="center_vertical"
+                android:textStyle="bold"
                 android:text="附件"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -41,7 +42,6 @@
                 android:id="@+id/files_listview"
                 android:dividerHeight="@dimen/activity_ui_margin_small"
                 android:divider="@android:color/transparent"
-                android:layout_marginTop="@dimen/activity_ui_margin_medium"
                 android:background="@color/gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -65,6 +65,7 @@
                     android:layout_marginRight="@dimen/activity_ui_margin_small"
                     android:text="审批意见"
                     android:textSize="15sp"
+                    android:textStyle="bold"
                     android:textColor="@color/blue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -78,8 +79,14 @@
 
             <com.phl.emoproject.widget.WrapContentHeightListView
                 android:id="@+id/nodes_listview"
-                android:dividerHeight="@dimen/activity_ui_margin_small"
                 android:divider="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:id="@+id/idea_control"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

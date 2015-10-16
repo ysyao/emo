@@ -132,6 +132,15 @@ public class TaskListDetail {
     private List<HistoryNodes> histotyNodes;
     private List<TaskFile> files;
     private Message message;
+    private List<Control> ideaControls;
+
+    public List<Control> getIdeaControls() {
+        return ideaControls;
+    }
+
+    public void setIdeaControls(List<Control> ideaControls) {
+        this.ideaControls = ideaControls;
+    }
 
     public List<Control> getControls() {
         return controls;

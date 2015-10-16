@@ -1,8 +1,11 @@
 package com.phl.emoproject.pojo;
 
 
+import com.google.gson.annotations.SerializedName;
+
 public class Message {
     private int returnCode;
+    @SerializedName("value")
     private String value;
 
     public int getReturnCode() {
