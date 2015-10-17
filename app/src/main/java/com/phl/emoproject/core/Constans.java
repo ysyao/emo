@@ -16,7 +16,7 @@ public interface Constans {
     String TASK_DETAIL = PATH + "/getTranactFlowForm.aspx";
     String CONSULT = PATH + "/consult.aspx";
     String USER_SCOPE = PATH + "/getUserScope.aspx";
-
+    String ASSIGN = PATH + "/assign.aspx";
 
     int REQUEST_CODE_SEARCH = 0x22;
 

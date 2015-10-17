@@ -22,7 +22,9 @@ import android.widget.TimePicker;
 
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.Constans;
+import com.phl.emoproject.core.EmoApplication;
 import com.phl.emoproject.pojo.ActionListHolder;
+import com.phl.emoproject.pojo.TaskList;
 import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.ui.UserSearchActivity;
 
@@ -294,13 +296,24 @@ public class TaskDetailUtils {
                 actionListContainer.addView(tv);
                 holder.setAssign(tv);
             } else if (id.equals("submitConsultButton")) {
-                TextView tv = generateActionButton(context, control);
-                actionListContainer.addView(tv);
-                holder.setSubmitConsultButton(tv);
+                View view = generateSubmitConsult(context, control);
+                holder.setSubmitConsultContainer(view);
+                EditText approvalText = (EditText)view.findViewById(R.id.approval_text);
+                holder.setSubmitConsultText(approvalText);
+                TextView submitBtn = (TextView) view.findViewById(R.id.submit_button);
+                submitBtn.setTag(control);
+                holder.setSubmitConsultButton(submitBtn);
+                actionListContainer.addView(view);
             }
         }
         container.addView(actionList);
         return holder;
+    }
+
+    public static View generateSubmitConsult(final Context context, TaskListDetail.Control control) {
+        View v = LayoutInflater.from(context).inflate(R.layout.view_submit_consult_button, null);
+        v.setTag(control);
+        return v;
     }
 
     public static View generateApprovalText(final Context context, TaskListDetail.Control control) {
@@ -325,9 +338,6 @@ public class TaskDetailUtils {
         return v;
     }
 
-
-
-
     public static String getApprovalText(View view) {
         EditText input = (EditText) view.findViewById(R.id.approval_text);
         return input.getText().toString();
@@ -341,4 +351,12 @@ public class TaskDetailUtils {
         return str;
     }
 
+    public static String getNodeId(List<TaskListDetail.Control> controls) {
+        for (TaskListDetail.Control control : controls) {
+            if (control.getId().equals("workflowinstanceid")) {
+                return control.getValue();
+            }
+        }
+        return "";
+    }
 }

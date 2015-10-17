@@ -20,6 +20,7 @@ import com.phl.emoproject.core.EmoApplication;
 import com.phl.emoproject.home.DetailFileAdapter;
 import com.phl.emoproject.home.HistoryNodesAdapter;
 import com.phl.emoproject.pojo.ActionListHolder;
+import com.phl.emoproject.pojo.ListGenericClass;
 import com.phl.emoproject.pojo.Message;
 import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.pojo.TaskList;
@@ -100,9 +101,9 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         } else if (id.equals("consultButton")) {
             postConsult();
         } else if (id.equals("assignButton")) {
-
+            postAssign();
         } else if (id.equals("submitConsultButton")) {
-
+            postConsultSuggestion();
         }
     }
 
@@ -174,10 +175,14 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 new PostConsult());
     }
 
+    /**
+     * 协商意见
+     */
     private void postConsultSuggestion() {
         indicator.setVisibility(View.VISIBLE);
         View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
         String notice = getNotice(noticeRootView);
+        String consultText = actionListHolder.getSubmitConsultText().getText().toString();
 
         AsyncHttpClientUtils.postConsultSuggestion(
                 this,
@@ -186,7 +191,30 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 task.getDiscussid(),
                 task.getUrl(),
                 notice,
-                "",
+                consultText,
+                new PostConsult());
+    }
+
+    private void postAssign() {
+        indicator.setVisibility(View.VISIBLE);
+//        View flowRootView = TaskDetailUtils.getControlViewById(container, "xianshiliucheng");
+//        EditText flowEt = TaskDetailUtils.getTextFieldValue(flowRootView);
+        List<TaskListDetail.Control> controls = EmoApplication.getInstance().getControls();
+        String instanceId = TaskDetailUtils.getNodeId(controls);
+
+        View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
+        //这里需要取tag中的值才比较准确
+        TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
+        String[] values = staffControl.getValue().split("#");
+        String scope = values[0] + "#" + values[1];
+        String userDescription = values[2];
+
+        AsyncHttpClientUtils.postAssign(
+                this,
+                instanceId,
+                task.getNodeId(),
+                scope,
+                userDescription,
                 new PostConsult());
     }
 
@@ -270,18 +298,20 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         }
     }
 
-    private class PostConsult extends BaseAsyncHttpResponseHandler<Message> {
+    private class PostConsult extends BaseAsyncHttpResponseHandler<ListGenericClass<Void>> {
         public PostConsult() {
             super();
-            setType(new TypeToken<Message>(){}.getType());
+            setType(new TypeToken<ListGenericClass<Void>>(){}.getType());
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers, Message message) {
+        public void onSuccess(int statusCode, Header[] headers, ListGenericClass<Void> listGenericClass) {
             indicator.setVisibility(View.GONE);
-            if (message.getReturnCode() == 0) {
-                Toast.makeText(TaskDetailActivity.this, message.getValue(), Toast.LENGTH_LONG).show();
+            if (listGenericClass.getMessage().getReturnCode() == 0) {
+                Toast.makeText(TaskDetailActivity.this, listGenericClass.getMessage().getValue(), Toast.LENGTH_LONG).show();
                 postAllData();
+            } else {
+                Toast.makeText(TaskDetailActivity.this, "提交失败", Toast.LENGTH_LONG).show();
             }
         }
 

@@ -20,19 +20,28 @@
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    <EditText
-        android:hint="账号或姓名"
-        android:textSize="15sp"
 
-        android:gravity="center_vertical"
-        android:padding="@dimen/activity_ui_margin_small"
-        android:id="@+id/search_input"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/bg_round_search"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:minHeight="30dp"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:background="@drawable/bg_round_search"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_ui_margin_large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:hint="账号或姓名"
+                android:textSize="15sp"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_ui_margin_small"
+                android:id="@+id/search_input"
+                android:layout_alignParentTop="true"
+                android:background="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:minHeight="30dp"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <TextView
             android:textSize="15sp"

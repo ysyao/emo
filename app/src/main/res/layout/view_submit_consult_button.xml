@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/activity_ui_margin_small"
+    android:paddingRight="@dimen/activity_ui_margin_small"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:background="@color/blue"
+        android:textColor="@color/white"
+        android:padding="@dimen/activity_ui_margin_small"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="协商意见框"/>
+
+    <EditText
+        android:background="@android:drawable/edit_text"
+        android:id="@+id/approval_text"
+        android:textSize="14sp"
+        android:minLines="7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/submit_button"
+        android:minWidth="80dp"
+        android:padding="@dimen/activity_ui_margin_medium"
+        android:gravity="center"
+        android:text="提交"
+        android:background="@drawable/bg_button_white"
+        android:layout_marginTop="@dimen/activity_ui_margin_large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

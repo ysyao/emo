@@ -1,6 +1,7 @@
 package com.phl.emoproject.pojo;
 
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class ActionListHolder {
@@ -10,6 +11,8 @@ public class ActionListHolder {
     TextView consult;
     TextView assign;
     TextView submitConsultButton;
+    EditText submitConsultText;
+    View submitConsultContainer;
 
     public TextView getSubmitConsultButton() {
         return submitConsultButton;
@@ -17,6 +20,22 @@ public class ActionListHolder {
 
     public void setSubmitConsultButton(TextView submitConsultButton) {
         this.submitConsultButton = submitConsultButton;
+    }
+
+    public View getSubmitConsultContainer() {
+        return submitConsultContainer;
+    }
+
+    public void setSubmitConsultContainer(View submitConsultContainer) {
+        this.submitConsultContainer = submitConsultContainer;
+    }
+
+    public EditText getSubmitConsultText() {
+        return submitConsultText;
+    }
+
+    public void setSubmitConsultText(EditText submitConsultText) {
+        this.submitConsultText = submitConsultText;
     }
 
     public View getView() {

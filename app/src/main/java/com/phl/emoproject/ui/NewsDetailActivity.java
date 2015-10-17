@@ -10,8 +10,12 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
 import com.phl.emoproject.home.NewsFileAdapter;
@@ -25,6 +29,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -43,7 +48,11 @@ public class NewsDetailActivity extends RoboActionBarActivity{
     ProgressBar indicator;
     @InjectView(R.id.files_listview)
     WrapContentHeightListView filesListView;
+    @InjectView(R.id.title)
+    TextView ttile;
     NewsFileAdapter newsFileAdapter;
+    String id;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +62,23 @@ public class NewsDetailActivity extends RoboActionBarActivity{
         ToolbarUtils.setCenterTitle(toolbar, "新闻详情");
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
+        id = intent.getStringExtra("id");
+        name = intent.getStringExtra("title");
+
+        if (savedInstanceState != null) {
+            id = savedInstanceState.getString("id");
+            name = savedInstanceState.getString("title");
+        }
+        ttile.setText(name);
         indicator.setVisibility(View.VISIBLE);
         AsyncHttpClientUtils.postNewsDetail(this, id, new PostNewsDetail());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("id", id);
+        outState.putString("title", name);
     }
 
     @Override
@@ -95,7 +118,21 @@ public class NewsDetailActivity extends RoboActionBarActivity{
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             NewsDetail.FileInfo fileInfo = (NewsDetail.FileInfo)adapterView.getItemAtPosition(i);
+                            AsyncHttpClient client = new AsyncHttpClient();
 
+                            client.get(fileInfo.getFileUrl(), new FileAsyncHttpResponseHandler(NewsDetailActivity.this) {
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+                                    Toast.makeText(getApplicationContext(), "下载出错", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, File response) {
+                                    // Do something with the file `response`
+                                    String path = response.getAbsolutePath();
+                                    Toast.makeText(getApplicationContext(), path, Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     });
                 } else {

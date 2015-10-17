@@ -107,6 +107,18 @@ public class AsyncHttpClientUtils {
         return postRequest(context, client, Constans.USER_SCOPE, params, baseAsyncHttpResponseHandler);
     }
 
+    public static AsyncHttpClient postAssign(Context context, String instanceId, String nodeId, String actorScope, String actorDescription, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String loginId = sp.getString(Constans.LOGIN_ID, "");
+        params.put("loginId", loginId);
+        params.put("instanceId", instanceId);
+        params.put("nodeId", nodeId);
+        params.put("actorScope", actorScope);
+        params.put("actorDescription", actorDescription);
+        return postRequest(context, client, Constans.ASSIGN, params, baseAsyncHttpResponseHandler);
+    }
 
     public static void cancelRequest(Context context) {
         client.cancelRequests(context, true);

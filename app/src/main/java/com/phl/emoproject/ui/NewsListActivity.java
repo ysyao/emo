@@ -103,6 +103,7 @@ public class NewsListActivity extends RoboActionBarActivity implements SwipeRefr
                             NewsList item = (NewsList)adapterView.getItemAtPosition(i);
                             Intent intent = new Intent(getApplicationContext(), NewsDetailActivity.class);
                             intent.putExtra("id", item.getId());
+                            intent.putExtra("title", item.getTitle());
                             startActivity(intent);
                         }
                     });
