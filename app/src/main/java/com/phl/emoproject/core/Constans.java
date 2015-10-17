@@ -1,10 +1,14 @@
 package com.phl.emoproject.core;
 
 
+import android.os.Environment;
+
 public interface Constans {
     String SHARED_PREFERENCE_NAME = "emos";
     String LOGIN_ID = "loginId";
     String PASSWORD = "password";
+
+    String FILE_PATH = Environment.getExternalStorageDirectory().getPath()+"/EMO_FILES";
 
 //    String PATH  = "http://oa.ynrjkj.com/mobile/EomWebService.asmx";
     String PATH  = "http://oa.ynrjkj.com/mobile";

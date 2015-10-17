@@ -27,11 +27,13 @@ public class HomePageListFragment extends RoboFragment implements
     TabPageIndicator tabPageIndicator;
     @InjectView(R.id.viewpager_list)
     ViewPager viewPager;
+    HomePageListFragmentAdapter fragmentAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewPager.setAdapter(new HomePageListFragmentAdapter(getChildFragmentManager()));
+        fragmentAdapter =  new HomePageListFragmentAdapter(getChildFragmentManager());
+        viewPager.setAdapter(fragmentAdapter);
         viewPager.setOffscreenPageLimit(4);
         tabPageIndicator.setViewPager(viewPager);
         tabPageIndicator.setOnPageChangeListener(this);
@@ -43,10 +45,21 @@ public class HomePageListFragment extends RoboFragment implements
         }, 500);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home_page_list, container, false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override

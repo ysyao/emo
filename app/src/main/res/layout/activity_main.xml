@@ -106,8 +106,9 @@
                     android:id="@+id/radio_password"
                     android:textColor="@color/white"
                     android:text="记住密码"
-                    app:drawable_unselected="@drawable/login_check_box_normal"
-                    app:drawable_selected="@drawable/login_checkbox_selected"
+                    android:textStyle="bold"
+                    app:drawable_unselected="@drawable/ic_uncheck_white"
+                    app:drawable_selected="@drawable/ic_checked_white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>

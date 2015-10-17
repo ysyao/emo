@@ -16,9 +16,21 @@ import java.util.List;
 public class DetailFileAdapter extends BaseListAdapter<TaskListDetail.TaskFile> {
     class Holder {
         TextView fileName;
+        View download;
+        View navi;
     }
+
+    DetailFilesAdapterListener filesAdapterListener;
     public DetailFileAdapter(Context context, List<TaskListDetail.TaskFile> items) {
         super(context, items);
+    }
+
+    public DetailFilesAdapterListener getFilesAdapterListener() {
+        return filesAdapterListener;
+    }
+
+    public void setFilesAdapterListener(DetailFilesAdapterListener filesAdapterListener) {
+        this.filesAdapterListener = filesAdapterListener;
     }
 
     @Override
@@ -28,15 +40,33 @@ public class DetailFileAdapter extends BaseListAdapter<TaskListDetail.TaskFile> 
             holder = new Holder();
             view = getInflater().inflate(R.layout.item_news_files, viewGroup, false);
             holder.fileName = (TextView) view.findViewById(R.id.file_name);
-
+            holder.download = view.findViewById(R.id.download);
+            holder.navi = view.findViewById(R.id.navi_files);
             view.setTag(holder);
         } else {
             holder = (Holder) view.getTag();
         }
-        TaskListDetail.TaskFile info = getItem(i);
+        final TaskListDetail.TaskFile info = getItem(i);
         holder.fileName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         holder.fileName.setText(info.getName());
-
+        holder.download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (filesAdapterListener == null) {
+                    return;
+                }
+                filesAdapterListener.onDownload(view, info);
+            }
+        });
+        holder.navi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (filesAdapterListener == null) {
+                    return;
+                }
+                filesAdapterListener.onRedirect(view, info);
+            }
+        });
         return view;
     }
 }

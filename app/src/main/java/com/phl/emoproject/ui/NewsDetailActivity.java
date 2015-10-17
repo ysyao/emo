@@ -3,6 +3,7 @@ package com.phl.emoproject.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,9 +19,12 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
+import com.phl.emoproject.core.Constans;
+import com.phl.emoproject.home.FilesAdapterListener;
 import com.phl.emoproject.home.NewsFileAdapter;
 import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
+import com.phl.emoproject.utils.DownloadFileUtils;
 import com.phl.emoproject.utils.ToolbarUtils;
 import com.phl.emoproject.widget.WrapContentHeightListView;
 
@@ -30,6 +34,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -39,7 +49,8 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_news_detail)
-public class NewsDetailActivity extends RoboActionBarActivity{
+public class NewsDetailActivity extends RoboActionBarActivity implements
+    FilesAdapterListener{
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
     @InjectView(R.id.webview)
@@ -87,75 +98,62 @@ public class NewsDetailActivity extends RoboActionBarActivity{
         AsyncHttpClientUtils.cancelRequest(this);
     }
 
+    @Override
+    public void onDownload(View view, final NewsDetail.FileInfo fileInfo) {
+        Toast.makeText(this, "正在下载"+fileInfo.getFileName(), Toast.LENGTH_LONG).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(fileInfo.getFileUrl(), new FileAsyncHttpResponseHandler(NewsDetailActivity.this) {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+                Toast.makeText(getApplicationContext(), "下载出错", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File response) {
+                // Do something with the file `response`
+//                String path = DownloadFileUtils.storeFile(response, fileInfo.getFileName());
+                Toast.makeText(getApplicationContext(), fileInfo.getFileName()+"已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onRedirect(View view, NewsDetail.FileInfo fileInfo) {
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        intent.setType(Constans.FILE_PATH);
+//        startActivityForResult(intent, 0x11);
+
+        DownloadFileUtils.openFile(this, fileInfo.getFileName());
+    }
+
     private class PostNewsDetail extends BaseAsyncHttpResponseHandler<NewsDetail> {
         public PostNewsDetail() {
             super();
-            setType(new TypeToken<NewsDetail>(){}.getType());
+            setType(new TypeToken<NewsDetail>() {
+            }.getType());
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, NewsDetail newsDetail) {
             indicator.setVisibility(View.GONE);
             if (newsDetail.getMessage().getReturnCode() == 0) {
-//                webView.getSettings().setDefaultTextEncodingName("utf-8");
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                    webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
-//                } else {
-//                    webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
-//                }
-                //  2015/10/11 unicode string
-//                String html = forceUtf8Coding(newsDetail.getJsonObject().getContent());
                 String var =newsDetail.getJsonObject().getContent().replaceAll("(\\%u)", "\\\\u");
                 String html = org.apache.commons.lang.StringEscapeUtils.unescapeJava(var);
-//                Log.d("ssssssssssss", StringEscapeUtils.unescapeJava("\u6768"));
-
-//                webView.loadData(getHtmlData(forceUtf8Coding(html)), "text/html; charset=utf-8", "utf-8");
                 webView.loadData(html, "text/html; charset=utf-8", "utf-8");
                 if(newsFileAdapter == null) {
                     newsFileAdapter = new NewsFileAdapter(NewsDetailActivity.this, newsDetail.getFiles());
                     filesListView.setAdapter(newsFileAdapter);
-                    filesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            NewsDetail.FileInfo fileInfo = (NewsDetail.FileInfo)adapterView.getItemAtPosition(i);
-                            AsyncHttpClient client = new AsyncHttpClient();
-
-                            client.get(fileInfo.getFileUrl(), new FileAsyncHttpResponseHandler(NewsDetailActivity.this) {
-                                @Override
-                                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                                    Toast.makeText(getApplicationContext(), "下载出错", Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onSuccess(int statusCode, Header[] headers, File response) {
-                                    // Do something with the file `response`
-                                    String path = response.getAbsolutePath();
-                                    Toast.makeText(getApplicationContext(), path, Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    });
+                    newsFileAdapter.setFilesAdapterListener(NewsDetailActivity.this);
                 } else {
                     newsFileAdapter.updateAdapter(newsDetail.getFiles());
                 }
             }
         }
-        private final Charset UTF_8 = Charset.forName("UTF-8");
-        private String forceUtf8Coding(String input) {
-            return new String(input.getBytes(UTF_8), UTF_8);
-        }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             indicator.setVisibility(View.GONE);
-        }
-
-        private String getHtmlData(String bodyHTML) {
-            String head = "<head>" +
-                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
-                    "<style>img{max-width: 100%; width:auto; height:auto;}</style>" +
-                    "</head>";
-            return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
         }
     }
 }

@@ -73,7 +73,7 @@ public class HomeFragment extends RoboFragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent;
         switch (i) {
-            default:
+            case 0:
                 intent = new Intent(activity, TaskListActivity.class);
                 intent.putExtra("type", HomeListType.DAIBAN);
                 startActivity(intent);
@@ -85,7 +85,6 @@ public class HomeFragment extends RoboFragment implements AdapterView.OnItemClic
                 break;
             case 2:
                 intent = new Intent(activity, NewsListActivity.class);
-                intent.putExtra("type", HomeListType.BEIAN);
                 startActivity(intent);
                 break;
         }

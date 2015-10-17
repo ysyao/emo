@@ -13,11 +13,15 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
 import com.phl.emoproject.core.Constans;
 import com.phl.emoproject.core.EmoApplication;
 import com.phl.emoproject.home.DetailFileAdapter;
+import com.phl.emoproject.home.DetailFilesAdapterListener;
+import com.phl.emoproject.home.FilesAdapterListener;
 import com.phl.emoproject.home.HistoryNodesAdapter;
 import com.phl.emoproject.pojo.ActionListHolder;
 import com.phl.emoproject.pojo.ListGenericClass;
@@ -26,12 +30,14 @@ import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.pojo.TaskList;
 import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
+import com.phl.emoproject.utils.DownloadFileUtils;
 import com.phl.emoproject.utils.TaskDetailUtils;
 import com.phl.emoproject.utils.ToolbarUtils;
 import com.phl.emoproject.widget.WrapContentHeightListView;
 
 import org.apache.http.Header;
 
+import java.io.File;
 import java.util.List;
 
 import roboguice.activity.RoboActionBarActivity;
@@ -40,7 +46,8 @@ import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_task_detail)
 public class TaskDetailActivity extends RoboActionBarActivity implements
-        View.OnClickListener{
+        View.OnClickListener,
+        DetailFilesAdapterListener {
     TaskList task;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
@@ -157,12 +164,16 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
      * 发起协商
      */
     private void postConsult() {
-        indicator.setVisibility(View.VISIBLE);
         View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
 //        EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
         //这里需要取tag中的值才比较准确
         TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
-
+        String staff = staffControl.getValue();
+        if (staff == null || "".equals(staff)) {
+            Toast.makeText(this, "请选择人员", Toast.LENGTH_LONG).show();
+            return;
+        }
+        indicator.setVisibility(View.VISIBLE);
         View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
         String notice = getNotice(noticeRootView);
         AsyncHttpClientUtils.postConsult(
@@ -196,7 +207,6 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
     }
 
     private void postAssign() {
-        indicator.setVisibility(View.VISIBLE);
 //        View flowRootView = TaskDetailUtils.getControlViewById(container, "xianshiliucheng");
 //        EditText flowEt = TaskDetailUtils.getTextFieldValue(flowRootView);
         List<TaskListDetail.Control> controls = EmoApplication.getInstance().getControls();
@@ -206,6 +216,11 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         //这里需要取tag中的值才比较准确
         TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
         String[] values = staffControl.getValue().split("#");
+        if ( values.length != 3) {
+            Toast.makeText(this, "请选择人员", Toast.LENGTH_LONG).show();
+            return;
+        }
+        indicator.setVisibility(View.VISIBLE);
         String scope = values[0] + "#" + values[1];
         String userDescription = values[2];
 
@@ -233,6 +248,32 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         return notice;
     }
 
+
+    @Override
+    public void onDownload(View view, final TaskListDetail.TaskFile fileInfo) {
+        Toast.makeText(this, "正在下载"+fileInfo.getName(), Toast.LENGTH_LONG).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(fileInfo.getFileUrl(), new FileAsyncHttpResponseHandler(this) {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+                Toast.makeText(getApplicationContext(), "下载出错", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File response) {
+                // Do something with the file `response`
+//                String path = DownloadFileUtils.storeFile(response, fileInfo.getFileName());
+                Toast.makeText(getApplicationContext(), fileInfo.getName()+"已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onRedirect(View view, TaskListDetail.TaskFile fileInfo) {
+        DownloadFileUtils.openFile(this, fileInfo.getName());
+    }
+
     /**
      * 获取详情数据
      */
@@ -255,13 +296,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 if(detailFileAdapter == null) {
                     detailFileAdapter = new DetailFileAdapter(TaskDetailActivity.this, taskListDetail.getFiles());
                     filesListView.setAdapter(detailFileAdapter);
-                    filesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            TaskListDetail.TaskFile fileInfo = (TaskListDetail.TaskFile)adapterView.getItemAtPosition(i);
-
-                        }
-                    });
+                    detailFileAdapter.setFilesAdapterListener(TaskDetailActivity.this);
                 } else {
                     detailFileAdapter.updateAdapter(taskListDetail.getFiles());
                 }
@@ -308,7 +343,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         public void onSuccess(int statusCode, Header[] headers, ListGenericClass<Void> listGenericClass) {
             indicator.setVisibility(View.GONE);
             if (listGenericClass.getMessage().getReturnCode() == 0) {
-                Toast.makeText(TaskDetailActivity.this, listGenericClass.getMessage().getValue(), Toast.LENGTH_LONG).show();
+                Toast.makeText(TaskDetailActivity.this, "操作成功", Toast.LENGTH_LONG).show();
                 postAllData();
             } else {
                 Toast.makeText(TaskDetailActivity.this, "提交失败", Toast.LENGTH_LONG).show();

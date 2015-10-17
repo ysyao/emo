@@ -16,9 +16,20 @@ import java.util.List;
 public class NewsFileAdapter extends BaseListAdapter<NewsDetail.FileInfo> {
     class Holder {
         TextView fileName;
+        View download;
+        View navi;
     }
+    FilesAdapterListener filesAdapterListener;
     public NewsFileAdapter(Context context, List<NewsDetail.FileInfo> items) {
         super(context, items);
+    }
+
+    public FilesAdapterListener getFilesAdapterListener() {
+        return filesAdapterListener;
+    }
+
+    public void setFilesAdapterListener(FilesAdapterListener filesAdapterListener) {
+        this.filesAdapterListener = filesAdapterListener;
     }
 
     @Override
@@ -28,15 +39,34 @@ public class NewsFileAdapter extends BaseListAdapter<NewsDetail.FileInfo> {
             holder = new Holder();
             view = getInflater().inflate(R.layout.item_news_files, viewGroup, false);
             holder.fileName = (TextView) view.findViewById(R.id.file_name);
-
+            holder.download = view.findViewById(R.id.download);
+            holder.navi = view.findViewById(R.id.navi_files);
             view.setTag(holder);
         } else {
             holder = (Holder) view.getTag();
         }
-        NewsDetail.FileInfo info = getItem(i);
+        final NewsDetail.FileInfo info = getItem(i);
         holder.fileName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         holder.fileName.setText(info.getFileName());
 
+        holder.download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (filesAdapterListener == null) {
+                    return;
+                }
+                filesAdapterListener.onDownload(view, info);
+            }
+        });
+        holder.navi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (filesAdapterListener == null) {
+                    return;
+                }
+                filesAdapterListener.onRedirect(view, info);
+            }
+        });
         return view;
     }
 }

@@ -48,16 +48,17 @@
 
         <TextView
             android:textColor="@color/blue_home"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:drawableLeft="@drawable/files"
             android:gravity="center_vertical"
             android:text="附件"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.phl.emoproject.widget.WrapContentHeightListView
             android:id="@+id/files_listview"
-            android:dividerHeight="@dimen/activity_ui_margin_small"
+            android:dividerHeight="0dp"
             android:divider="@android:color/transparent"
             android:layout_marginTop="@dimen/activity_ui_margin_medium"
             android:background="@color/gray"

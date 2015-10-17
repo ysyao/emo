@@ -1,16 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:paddingTop="@dimen/activity_ui_margin_small"
-    android:paddingBottom="@dimen/activity_ui_margin_small"
-    android:paddingLeft="@dimen/activity_ui_margin_medium"
-    android:paddingRight="@dimen/activity_ui_margin_medium"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="@color/gray"
+    android:gravity="center_vertical"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text=""
-        android:textColor="@color/blue"
-        android:id="@+id/file_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:paddingTop="@dimen/activity_ui_margin_small"
+        android:paddingBottom="@dimen/activity_ui_margin_small"
+        android:paddingLeft="@dimen/activity_ui_margin_medium"
+        android:paddingRight="@dimen/activity_ui_margin_medium"
+        android:background="@drawable/bg_clickable_item"
+        android:id="@+id/download"
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_weight="6"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="小罗"
+            android:textColor="@color/blue"
+            android:id="@+id/file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:background="@color/card_bold_gray" />
+
+    <LinearLayout
+        android:paddingTop="@dimen/activity_ui_margin_small"
+        android:paddingBottom="@dimen/activity_ui_margin_small"
+        android:paddingLeft="@dimen/activity_ui_margin_medium"
+        android:paddingRight="@dimen/activity_ui_margin_medium"
+        android:id="@+id/navi_files"
+        android:background="@drawable/bg_clickable_item"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:padding="@dimen/activity_ui_margin_tiny"
+            android:background="@drawable/ic_action_action_exit_to_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

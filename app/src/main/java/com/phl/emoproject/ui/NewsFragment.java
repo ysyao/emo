@@ -121,6 +121,7 @@ public class NewsFragment extends RoboFragment implements
                             NewsList item = (NewsList)adapterView.getItemAtPosition(i);
                             Intent intent = new Intent(activity, NewsDetailActivity.class);
                             intent.putExtra("id", item.getId());
+                            intent.putExtra("title", item.getTitle());
                             startActivity(intent);
                         }
                     });

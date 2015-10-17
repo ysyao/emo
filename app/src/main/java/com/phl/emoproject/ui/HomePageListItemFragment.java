@@ -43,7 +43,7 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
 
     public static HomePageListItemFragment newInstance(HomeListType type) {
         HomePageListItemFragment homePageListItemFragment = new HomePageListItemFragment();
-        homePageListItemFragment.type = type;
+//        homePageListItemFragment.type = type;
         Bundle bundle = new Bundle();
         bundle.putSerializable("type", type);
         homePageListItemFragment.setArguments(bundle);
@@ -119,6 +119,7 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
     public void onStop() {
         super.onStop();
         AsyncHttpClientUtils.cancelRequest(activity);
+        taskListAdapter = null;
     }
 
     @Override

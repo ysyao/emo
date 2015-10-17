@@ -23,10 +23,14 @@ import android.widget.TimePicker;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.Constans;
 import com.phl.emoproject.core.EmoApplication;
+import com.phl.emoproject.home.SpinnerAdapter;
 import com.phl.emoproject.pojo.ActionListHolder;
 import com.phl.emoproject.pojo.TaskList;
 import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.ui.UserSearchActivity;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -83,8 +87,8 @@ public class TaskDetailUtils {
         if (control.getControlType().equals("staff_h")) {
             String[] values = control.getValue().split("#");
             EditText et = getTextFieldValue(v);
-            et.setText(values[2]);
-//            et.setKeyListener(null);
+//            et.setText(values[2]);
+            et.setText(control.getValue());
             et.setFocusable(false);
             et.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.list_selector_bg));
             et.setOnClickListener(new View.OnClickListener() {
@@ -137,9 +141,16 @@ public class TaskDetailUtils {
         View v = LayoutInflater.from(context).inflate(R.layout.view_spinner, null);
         v.setTag(control);
         getSpinnerName(v).setText(control.getLabelText());
-        List<String> strings = new ArrayList<>();
-        strings.add(control.getValue());
-        getSpinnerValue(v).setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, strings));
+        String[] values = control.getValue().split("\\|");
+
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        for (int i=0; i<values.length;i++) {
+            String value = values[i];
+            String[] nameValue = value.split("\\~");
+            nameValuePairs.add(new BasicNameValuePair(nameValue[0], nameValue[1]));
+        }
+        getSpinnerValue(v).setAdapter(new SpinnerAdapter(context, nameValuePairs));
+//        getSpinnerValue(v).setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, values));
         return v;
     }
 
@@ -249,18 +260,13 @@ public class TaskDetailUtils {
         return v;
     }
 
-    public static boolean isNotifyDaiBanSelected(View view) {
-        View daiban = view.findViewById(R.id.daiban);
-        return daiban.getVisibility() == View.VISIBLE;
-    }
-
     public static boolean isNotifyDuanXinSelected(View view) {
-        View duanxin = view.findViewById(R.id.duanxin);
+        View duanxin = view.findViewById(R.id.duanxin_icon);
         return duanxin.getVisibility() == View.VISIBLE;
     }
 
     public static boolean isNotifyEmailSelected(View view) {
-        View email = view.findViewById(R.id.email);
+        View email = view.findViewById(R.id.email_icon);
         return email.getVisibility() == View.VISIBLE;
     }
 
