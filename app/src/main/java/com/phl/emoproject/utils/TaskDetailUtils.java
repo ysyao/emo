@@ -50,6 +50,56 @@ public class TaskDetailUtils {
         return null;
     }
 
+    public static List<TaskListDetail.Control> getControls(ViewGroup container, ViewGroup ideaContainer) {
+        List<TaskListDetail.Control> controls = new ArrayList<>();
+        for (int i=0;i<container.getChildCount(); i++) {
+            View child = container.getChildAt(i);
+            TaskListDetail.Control control = (TaskListDetail.Control) child.getTag();
+            switch (control.getControlType()) {
+                case "combobox_h":
+                    Spinner spinner = getSpinnerValue(child);
+                    NameValuePair nameValuePair = (NameValuePair)spinner.getSelectedItem();
+                    control.setValue(nameValuePair.getValue());
+                    break;
+                case "checkbox_h":
+                    String value = getCheckBoxValue(child).isChecked() ? "1" : "0";
+                    control.setValue(value);
+                    break;
+                case "notice_h":
+                    String notice = getNotice(child);
+                    control.setValue(notice);
+                    break;
+                case "textarea":
+                    String text = getTextFieldValue(child).getText().toString();
+                    control.setValue(text);
+                    break;
+                case "date_h":
+                    String date = getDateValue(child).getText().toString();
+                    control.setValue(date);
+                    break;
+                case "time_h":
+                    String time =  getDateValue(child).getText().toString();
+                    control.setValue(time);
+                    break;
+                default:
+                    if (!control.getControlType().equals("staff_h")) {
+                        EditText et1 =  getTextFieldValue(child);
+                        String textValue = et1.getText().toString();
+                        control.setValue(textValue);
+                    }
+                    break;
+            }
+            controls.add(control);
+        }
+
+        EditText suggestionEt = getApprovalEditText(ideaContainer);
+        String suggestion = suggestionEt.getText().toString();
+        TaskListDetail.Control suggestionControl = (TaskListDetail.Control) suggestionEt.getTag();
+        suggestionControl.setValue(suggestion);
+        controls.add(suggestionControl);
+        return controls;
+    }
+
 
     public static void generateViewByControl(Activity context, TaskListDetail.Control control, ViewGroup container) {
         String controlType = control.getControlType();
@@ -260,6 +310,21 @@ public class TaskDetailUtils {
         return v;
     }
 
+    public static String getNotice(View noticeRootView) {
+        boolean duanxin = TaskDetailUtils.isNotifyDuanXinSelected(noticeRootView);
+        boolean email = TaskDetailUtils.isNotifyEmailSelected(noticeRootView);
+
+        String notice = "";
+        if (duanxin && !email) {
+            notice = "1";
+        } else if (!duanxin && email) {
+            notice = "2";
+        } else if (duanxin && email) {
+            notice = "12";
+        }
+        return notice;
+    }
+
     public static boolean isNotifyDuanXinSelected(View view) {
         View duanxin = view.findViewById(R.id.duanxin_icon);
         return duanxin.getVisibility() == View.VISIBLE;
@@ -324,6 +389,8 @@ public class TaskDetailUtils {
 
     public static View generateApprovalText(final Context context, TaskListDetail.Control control) {
         View v = LayoutInflater.from(context).inflate(R.layout.view_approval_textarea, null);
+        EditText et = (EditText) v.findViewById(R.id.approval_text);
+        et.setTag(control);
         v.setTag(control);
         return v;
     }
@@ -347,6 +414,10 @@ public class TaskDetailUtils {
     public static String getApprovalText(View view) {
         EditText input = (EditText) view.findViewById(R.id.approval_text);
         return input.getText().toString();
+    }
+
+    public static EditText getApprovalEditText(View view) {
+        return (EditText) view.findViewById(R.id.approval_text);
     }
 
     private static String zeroAdd(int number) {

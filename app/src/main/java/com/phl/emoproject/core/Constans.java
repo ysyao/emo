@@ -21,6 +21,8 @@ public interface Constans {
     String CONSULT = PATH + "/consult.aspx";
     String USER_SCOPE = PATH + "/getUserScope.aspx";
     String ASSIGN = PATH + "/assign.aspx";
+    String APPROVAL = PATH + "/approve.aspx";
+    String REJECT = PATH + "/reject.aspx";
 
     int REQUEST_CODE_SEARCH = 0x22;
 

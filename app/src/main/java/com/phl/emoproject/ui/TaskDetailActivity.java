@@ -6,12 +6,12 @@ import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -21,12 +21,10 @@ import com.phl.emoproject.core.Constans;
 import com.phl.emoproject.core.EmoApplication;
 import com.phl.emoproject.home.DetailFileAdapter;
 import com.phl.emoproject.home.DetailFilesAdapterListener;
-import com.phl.emoproject.home.FilesAdapterListener;
 import com.phl.emoproject.home.HistoryNodesAdapter;
 import com.phl.emoproject.pojo.ActionListHolder;
 import com.phl.emoproject.pojo.ListGenericClass;
-import com.phl.emoproject.pojo.Message;
-import com.phl.emoproject.pojo.NewsDetail;
+import com.phl.emoproject.pojo.RejectResponse;
 import com.phl.emoproject.pojo.TaskList;
 import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
@@ -81,7 +79,6 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         if (savedInstanceState != null) {
             task = (TaskList)savedInstanceState.getSerializable("task");
         }
-
         postAllData();
     }
 
@@ -102,9 +99,9 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         TaskListDetail.Control control = (TaskListDetail.Control)view.getTag();
         String id = control.getId();
         if (id.equals("argeeButton")) {
-
+            postApproval();
         } else if (id.equals("rejectButton")) {
-
+            postReject();
         } else if (id.equals("consultButton")) {
             postConsult();
         } else if (id.equals("assignButton")) {
@@ -122,6 +119,9 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
             EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
             String user = data.getStringExtra("user");
             String[] values = user.split("#");
+            if (values.length != 3) {
+                return;
+            }
             staff.setText(values[2]);
             TaskListDetail.Control control = (TaskListDetail.Control)staffRootView.getTag();
             control.setValue(user);
@@ -145,12 +145,36 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         }
     }
 
+    @Override
+    public void onDownload(View view, final TaskListDetail.TaskFile fileInfo) {
+        Toast.makeText(this, "正在下载"+fileInfo.getName(), Toast.LENGTH_LONG).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(fileInfo.getFileUrl(), new FileAsyncHttpResponseHandler(this) {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+                Toast.makeText(getApplicationContext(), "下载出错", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File response) {
+                // Do something with the file `response`
+//                String path = DownloadFileUtils.storeFile(response, fileInfo.getFileName());
+                Toast.makeText(getApplicationContext(), fileInfo.getName() + "已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onRedirect(View view, TaskListDetail.TaskFile fileInfo) {
+        DownloadFileUtils.openFile(this, fileInfo.getName());
+    }
+
+
     /**
      * 获取全部数据
      */
     private void postAllData() {
         indicator.setVisibility(View.VISIBLE);
-
         ideaContainer.removeAllViews();
         container.removeAllViews();
         AsyncHttpClientUtils.postTaskDetail(this,
@@ -160,6 +184,29 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 task.getDiscussid(),
                 new TaskDetailResponse());
     }
+
+    /**
+     * 审批同意
+     */
+    private void postApproval() {
+        indicator.setVisibility(View.VISIBLE);
+        List<TaskListDetail.Control> controls = TaskDetailUtils.getControls(container, ideaContainer);
+        Gson gson = new Gson();
+        String doc = gson.toJson(controls, new TypeToken<List<TaskListDetail.Control>>(){}.getType());
+        AsyncHttpClientUtils.postApproval(this, doc, new PostResponse());
+    }
+
+    /**
+     * 拒绝
+     */
+    private void postReject() {
+        indicator.setVisibility(View.VISIBLE);
+        List<TaskListDetail.Control> controls = TaskDetailUtils.getControls(container, ideaContainer);
+        Gson gson = new Gson();
+        String doc = gson.toJson(controls, new TypeToken<List<TaskListDetail.Control>>(){}.getType());
+        AsyncHttpClientUtils.postReject(this, doc, new RejectRes());
+    }
+
     /**
      * 发起协商
      */
@@ -175,7 +222,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         }
         indicator.setVisibility(View.VISIBLE);
         View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
-        String notice = getNotice(noticeRootView);
+        String notice = TaskDetailUtils.getNotice(noticeRootView);
         AsyncHttpClientUtils.postConsult(
                 this,
                 task.getHistoryNodeId(),
@@ -183,7 +230,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 staffControl.getValue(),
                 task.getUrl(),
                 notice,
-                new PostConsult());
+                new PostResponse());
     }
 
     /**
@@ -192,7 +239,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
     private void postConsultSuggestion() {
         indicator.setVisibility(View.VISIBLE);
         View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
-        String notice = getNotice(noticeRootView);
+        String notice = TaskDetailUtils.getNotice(noticeRootView);
         String consultText = actionListHolder.getSubmitConsultText().getText().toString();
 
         AsyncHttpClientUtils.postConsultSuggestion(
@@ -203,7 +250,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 task.getUrl(),
                 notice,
                 consultText,
-                new PostConsult());
+                new PostResponse());
     }
 
     private void postAssign() {
@@ -230,48 +277,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 task.getNodeId(),
                 scope,
                 userDescription,
-                new PostConsult());
-    }
-
-    private String getNotice(View noticeRootView) {
-        boolean duanxin = TaskDetailUtils.isNotifyDuanXinSelected(noticeRootView);
-        boolean email = TaskDetailUtils.isNotifyEmailSelected(noticeRootView);
-
-        String notice = "";
-        if (duanxin && !email) {
-            notice = "1";
-        } else if (!duanxin && email) {
-            notice = "2";
-        } else if (duanxin && email) {
-            notice = "12";
-        }
-        return notice;
-    }
-
-
-    @Override
-    public void onDownload(View view, final TaskListDetail.TaskFile fileInfo) {
-        Toast.makeText(this, "正在下载"+fileInfo.getName(), Toast.LENGTH_LONG).show();
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(fileInfo.getFileUrl(), new FileAsyncHttpResponseHandler(this) {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-                Toast.makeText(getApplicationContext(), "下载出错", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File response) {
-                // Do something with the file `response`
-//                String path = DownloadFileUtils.storeFile(response, fileInfo.getFileName());
-                Toast.makeText(getApplicationContext(), fileInfo.getName()+"已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    @Override
-    public void onRedirect(View view, TaskListDetail.TaskFile fileInfo) {
-        DownloadFileUtils.openFile(this, fileInfo.getName());
+                new PostResponse());
     }
 
     /**
@@ -333,8 +339,8 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         }
     }
 
-    private class PostConsult extends BaseAsyncHttpResponseHandler<ListGenericClass<Void>> {
-        public PostConsult() {
+    private class PostResponse extends BaseAsyncHttpResponseHandler<ListGenericClass<Void>> {
+        public PostResponse() {
             super();
             setType(new TypeToken<ListGenericClass<Void>>(){}.getType());
         }
@@ -355,4 +361,29 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
             indicator.setVisibility(View.GONE);
         }
     }
+
+    private class RejectRes extends BaseAsyncHttpResponseHandler<RejectResponse> {
+        public RejectRes() {
+            super();
+            setType(new TypeToken<RejectResponse>(){}.getType());
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, RejectResponse rejectResponse) {
+            indicator.setVisibility(View.GONE);
+            if (rejectResponse.getResult() == 0) {
+                Toast.makeText(TaskDetailActivity.this, "操作成功", Toast.LENGTH_LONG).show();
+                postAllData();
+            } else {
+                Toast.makeText(TaskDetailActivity.this, "提交失败", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            indicator.setVisibility(View.GONE);
+        }
+    }
+
+
 }

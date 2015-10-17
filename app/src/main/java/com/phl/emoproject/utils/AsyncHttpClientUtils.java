@@ -120,6 +120,26 @@ public class AsyncHttpClientUtils {
         return postRequest(context, client, Constans.ASSIGN, params, baseAsyncHttpResponseHandler);
     }
 
+    public static AsyncHttpClient postApproval(Context context, String doc, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+//        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+//        String loginId = sp.getString(Constans.LOGIN_ID, "");
+//        params.put("loginId", loginId);
+        params.put("doc", doc);
+        return postRequest(context, client, Constans.APPROVAL, params, baseAsyncHttpResponseHandler);
+    }
+
+    public static AsyncHttpClient postReject(Context context, String doc, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+//        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+//        String loginId = sp.getString(Constans.LOGIN_ID, "");
+//        params.put("loginId", loginId);
+        params.put("doc", doc);
+        return postRequest(context, client, Constans.REJECT, params, baseAsyncHttpResponseHandler);
+    }
+
     public static void cancelRequest(Context context) {
         client.cancelRequests(context, true);
     }
