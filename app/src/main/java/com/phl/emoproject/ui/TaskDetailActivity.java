@@ -353,10 +353,20 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         public void onSuccess(int statusCode, Header[] headers, ListGenericClass<Void> listGenericClass) {
             indicator.setVisibility(View.GONE);
             if (listGenericClass.getMessage().getReturnCode() == 0) {
-                Toast.makeText(TaskDetailActivity.this, "操作成功", Toast.LENGTH_LONG).show();
+                String value = listGenericClass.getMessage().getValue();
+                if (value != null) {
+                    Toast.makeText(TaskDetailActivity.this, value, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TaskDetailActivity.this, "操作成功", Toast.LENGTH_LONG).show();
+                }
                 postAllData();
             } else {
-                Toast.makeText(TaskDetailActivity.this, "提交失败", Toast.LENGTH_LONG).show();
+                String value = listGenericClass.getMessage().getValue();
+                if (value != null) {
+                    Toast.makeText(TaskDetailActivity.this, value, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TaskDetailActivity.this, "提交失败", Toast.LENGTH_LONG).show();
+                }
             }
         }
 

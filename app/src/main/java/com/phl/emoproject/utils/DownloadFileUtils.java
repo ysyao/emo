@@ -57,7 +57,6 @@ public class DownloadFileUtils {
         String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension
                 (MimeTypeMap.getFileExtensionFromUrl(path));
 
-
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
         intent.setType(mimeType);
         intent.setDataAndType(uri_path, mimeType);
