@@ -1,6 +1,8 @@
 package com.phl.emoproject.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
@@ -140,6 +142,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
      * @param controls control数组
      */
     private void generateViewByControls(List<TaskListDetail.Control> controls) {
+        container.setTag(controls);
         for (TaskListDetail.Control control : controls) {
             TaskDetailUtils.generateViewByControl(this, control, container);
         }
@@ -191,6 +194,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
     private void postApproval() {
         indicator.setVisibility(View.VISIBLE);
         List<TaskListDetail.Control> controls = TaskDetailUtils.getControls(container, ideaContainer);
+
         Gson gson = new Gson();
         String doc = gson.toJson(controls, new TypeToken<List<TaskListDetail.Control>>(){}.getType());
         AsyncHttpClientUtils.postApproval(this, doc, new PostResponse());

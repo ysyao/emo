@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class TaskDetailUtils {
     }
 
     public static List<TaskListDetail.Control> getControls(ViewGroup container, ViewGroup ideaContainer) {
-        List<TaskListDetail.Control> controls = new ArrayList<>();
+        List<TaskListDetail.Control> controls = (List<TaskListDetail.Control>) container.getTag();
         for (int i=0;i<container.getChildCount(); i++) {
             View child = container.getChildAt(i);
             TaskListDetail.Control control = (TaskListDetail.Control) child.getTag();
@@ -89,15 +90,44 @@ public class TaskDetailUtils {
                     }
                     break;
             }
-            controls.add(control);
+//            controls.add(control);
+            replaceControlById(control, controls);
         }
 
+        //将审批信息放入到controls当中
         EditText suggestionEt = getApprovalEditText(ideaContainer);
         String suggestion = suggestionEt.getText().toString();
         TaskListDetail.Control suggestionControl = (TaskListDetail.Control) suggestionEt.getTag();
         suggestionControl.setValue(suggestion);
+        suggestionControl.setIsHidden("0");
+        suggestionControl.setControlType("approvetextarea");
+        suggestionControl.setLabelText("审批意见");
+        suggestionControl.setId("approveIdeaTextarea");
         controls.add(suggestionControl);
+
+        //将user信息放入controls当中
+        SharedPreferences sp = container.getContext().getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String loginId = sp.getString(Constans.LOGIN_ID, "");
+        TaskListDetail.Control userControl = new TaskListDetail.Control();
+        userControl.setValue(loginId);
+        userControl.setControlType("input");
+        userControl.setId("loginid");
+        userControl.setIsHidden("0");
+        userControl.setLabelText("登录账号");
+        controls.add(userControl);
         return controls;
+    }
+
+    public static void replaceControlById(TaskListDetail.Control newControl, List<TaskListDetail.Control> controls) {
+        for (TaskListDetail.Control oldControl : controls) {
+            if (oldControl.getId().equals(newControl.getId())) {
+                oldControl.setLabelText(newControl.getLabelText());
+                oldControl.setIsHidden(newControl.getIsHidden());
+                oldControl.setControlType(newControl.getControlType());
+                oldControl.setValue(newControl.getValue());
+                return;
+            }
+        }
     }
 
 
@@ -137,8 +167,11 @@ public class TaskDetailUtils {
         if (control.getControlType().equals("staff_h")) {
             String[] values = control.getValue().split("#");
             EditText et = getTextFieldValue(v);
-//            et.setText(values[2]);
-            et.setText(control.getValue());
+            if (values.length == 3) {
+                et.setText(values[2]);
+            } else {
+                et.setText(control.getValue());
+            }
             et.setFocusable(false);
             et.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.list_selector_bg));
             et.setOnClickListener(new View.OnClickListener() {
@@ -197,7 +230,12 @@ public class TaskDetailUtils {
         for (int i=0; i<values.length;i++) {
             String value = values[i];
             String[] nameValue = value.split("\\~");
-            nameValuePairs.add(new BasicNameValuePair(nameValue[0], nameValue[1]));
+            if (nameValue.length == 2) {
+                nameValuePairs.add(new BasicNameValuePair(nameValue[0], nameValue[1]));
+            } else {
+                nameValuePairs.add(new BasicNameValuePair(value, value));
+            }
+
         }
         getSpinnerValue(v).setAdapter(new SpinnerAdapter(context, nameValuePairs));
 //        getSpinnerValue(v).setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, values));
@@ -244,14 +282,23 @@ public class TaskDetailUtils {
             @Override
             public void onClick(View view) {
                 Calendar c = Calendar.getInstance();
-                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onTimeSet(TimePicker view,int hourOfDay, int minute) {
-                        String hour = zeroAdd(hourOfDay);
-                        String min = zeroAdd(minute);
-                        time.setText(date + " " + hour + ":" + min + ":" + "00");
+                    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                        final String date = zeroAdd(year)+"-"+zeroAdd(monthOfYear+1)+"-"+zeroAdd(dayOfMonth);
+
+                        Calendar c = Calendar.getInstance();
+                        new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view,int hourOfDay, int minute) {
+                                String hour = zeroAdd(hourOfDay);
+                                String min = zeroAdd(minute);
+                                time.setText(date + " " + hour + ":" + min + ":" + "00");
+                            }
+                        }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),true).show();
                     }
-                }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),true).show();
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+
             }
         });
         return v;
