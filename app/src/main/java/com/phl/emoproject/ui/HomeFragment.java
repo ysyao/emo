@@ -59,12 +59,12 @@ public class HomeFragment extends RoboFragment implements AdapterView.OnItemClic
     }
     private List<HomeGridViewItem> craeteItems() {
         List<HomeGridViewItem> items = new ArrayList<>();
-        items.add(new HomeGridViewItem("EOM待办列表", R.drawable.pic_1));
-        items.add(new HomeGridViewItem("EOM备案列表", R.drawable.pic_2));
-        items.add(new HomeGridViewItem("新闻列表", R.drawable.pic_3));
-        items.add(new HomeGridViewItem("新员工入职通告", R.drawable.pic_4));
-        items.add(new HomeGridViewItem("通知", R.drawable.pic_5));
-        items.add(new HomeGridViewItem("公告", R.drawable.pic_6));
+        items.add(new HomeGridViewItem("EOM待办", R.drawable.pic_1));
+        items.add(new HomeGridViewItem("EOM备案", R.drawable.pic_2));
+        items.add(new HomeGridViewItem("新闻", R.drawable.pic_3));
+        items.add(new HomeGridViewItem("入职公告", R.drawable.pic_4));
+        items.add(new HomeGridViewItem("管控体系", R.drawable.pic_5));
+        items.add(new HomeGridViewItem("知识", R.drawable.pic_6));
 
         return items;
     }
