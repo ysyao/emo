@@ -6,6 +6,7 @@ import android.os.Environment;
 public interface Constans {
     String SHARED_PREFERENCE_NAME = "emos";
     String LOGIN_ID = "loginId";
+    String LOGIN_ID_STORED = "loginIdsdafsf";
     String PASSWORD = "password";
 
     String FILE_PATH = Environment.getExternalStorageDirectory().getPath()+"/EMO_FILES";

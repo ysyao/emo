@@ -218,6 +218,11 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
 //        EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
         //这里需要取tag中的值才比较准确
+
+        if (staffRootView == null) {
+            return;
+        }
+
         TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
         String staff = staffControl.getValue();
         if (staff == null || "".equals(staff)) {
@@ -226,6 +231,9 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         }
         indicator.setVisibility(View.VISIBLE);
         View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
+        if (noticeRootView == null) {
+            return;
+        }
         String notice = TaskDetailUtils.getNotice(noticeRootView);
         AsyncHttpClientUtils.postConsult(
                 this,
@@ -264,6 +272,9 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         String instanceId = TaskDetailUtils.getNodeId(controls);
 
         View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
+        if (staffRootView == null) {
+            return;
+        }
         //这里需要取tag中的值才比较准确
         TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
         String[] values = staffControl.getValue().split("#");

@@ -25,6 +25,7 @@ import roboguice.inject.InjectView;
 
 import static com.phl.emoproject.core.Constans.LOGIN_ID;
 import static com.phl.emoproject.core.Constans.PASSWORD;
+import static com.phl.emoproject.core.Constans.LOGIN_ID_STORED;
 
 @ContentView(R.layout.activity_main)
 public class LoginActivity extends RoboActionBarActivity{
@@ -108,17 +109,19 @@ public class LoginActivity extends RoboActionBarActivity{
             if (loginRes.getMessage().getReturnCode() == 0) {
                 redirect();
 
+                String accountStr = account.getText().toString();
+                String passStr = password.getText().toString();
+
+                SharedPreferences sp = getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor ed = sp.edit();
+                ed.putString(LOGIN_ID, accountStr);
+                ed.putString(PASSWORD, passStr);
                 //  2015/10/10 如果用户选择"保存账号密码则保存"
                 if (isStore.isChecked()) {
-                    String accountStr = account.getText().toString();
-                    String passStr = password.getText().toString();
-
-                    SharedPreferences sp = getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor ed = sp.edit();
-                    ed.putString(LOGIN_ID, accountStr);
-                    ed.putString(PASSWORD, passStr);
-                    ed.apply();
+                    ed.putString(LOGIN_ID_STORED, accountStr);
                 }
+
+                ed.apply();
 
                 finish();
             } else {

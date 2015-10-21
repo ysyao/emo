@@ -15,6 +15,8 @@ import com.phl.emoproject.core.Constans;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 
+import static com.phl.emoproject.core.Constans.LOGIN_ID_STORED;
+
 public class MeFragment extends RoboFragment {
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private static final String ARG_PARAM1 = "param1";
@@ -76,6 +78,7 @@ public class MeFragment extends RoboFragment {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString(Constans.LOGIN_ID, "");
                 editor.putString(Constans.PASSWORD, "");
+                editor.putString(Constans.LOGIN_ID_STORED, "");
                 editor.apply();
                 Intent i = new Intent(getActivity(), LoginActivity.class);
                 startActivity(i);

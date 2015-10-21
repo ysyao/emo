@@ -20,6 +20,7 @@ import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
 import com.phl.emoproject.utils.ToolbarUtils;
 import com.phl.emoproject.utils.ViewUtils;
+import com.phl.emoproject.widget.SwitchButton;
 
 import org.apache.http.Header;
 
@@ -30,19 +31,20 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.activity_task_list)
 public class TaskListActivity extends RoboActionBarActivity implements
         SwipeRefreshLayout.OnRefreshListener,
-        AdapterView.OnItemClickListener {
-
-
+        AdapterView.OnItemClickListener,
+        SwitchButton.SwitchButtonListener{
     enum ListViewOper {
         REFRESH,MORE
     }
 
+    @InjectView(R.id.switch_button)
+    SwitchButton switchButton;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
     @InjectView(R.id.list_page_listview)
     ListView listView;
-    @InjectView(R.id.no_data)
-    View noData;
+//    @InjectView(R.id.no_data)
+//    View noData;
     @InjectView(R.id.swipe_latyout)
     SwipeRefreshLayout swipeRefreshLayout;
     View moreData;
@@ -50,7 +52,7 @@ public class TaskListActivity extends RoboActionBarActivity implements
     int pageNo = 1;
     int pageSize = 12;
     String taskType = "";
-    String status = "";
+    String status = "0";
     String keyWords;
     TaskListAdapter taskListAdapter;
 
@@ -86,8 +88,9 @@ public class TaskListActivity extends RoboActionBarActivity implements
             }
         });
         listView.addFooterView(moreData);
-        listView.setEmptyView(noData);
+        ViewUtils.setNoData(listView);
         listView.setOnItemClickListener(this);
+        switchButton.setSwitchButtonListener(this);
     }
 
     @Override
@@ -97,12 +100,12 @@ public class TaskListActivity extends RoboActionBarActivity implements
     }
 
     private void postTaskListRequest(ListViewOper listViewOper) {
-        ViewUtils.setListViewFooterIndicatorVisible(moreData, true);
         switch (listViewOper) {
             case REFRESH:
                 pageNo = 1;
                 break;
             case MORE:
+                ViewUtils.setListViewFooterIndicatorVisible(moreData, true);
                 pageNo += 1;
                 break;
         }
@@ -133,6 +136,22 @@ public class TaskListActivity extends RoboActionBarActivity implements
     }
 
     @Override
+    public void onSwitchItemClicked(int position, View view) {
+        if (position == 0) {
+            status = "0";
+        } else {
+            status = "1";
+        }
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         TaskList task = (TaskList)adapterView.getItemAtPosition(i);
         Intent intent = new Intent(this, TaskDetailActivity.class);
@@ -156,7 +175,6 @@ public class TaskListActivity extends RoboActionBarActivity implements
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, ListGenericClass<TaskList> taskListListGenericClass) {
-            ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
             swipeRefreshLayout.setRefreshing(false);
             switch (listViewOper) {
                 case REFRESH:
@@ -168,6 +186,7 @@ public class TaskListActivity extends RoboActionBarActivity implements
                     }
                     break;
                 case MORE:
+                    ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
                     if (taskListListGenericClass.getJsonList().size() == 0) {
                         ViewUtils.setListViewFooterTitle(moreData, "已无更多数据");
                         return;
