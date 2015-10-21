@@ -40,6 +40,8 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
     String status = "";
     String keyWords;
     TaskListAdapter taskListAdapter;
+    @InjectView(R.id.indicator)
+    View indicator;
 
     public static HomePageListItemFragment newInstance(HomeListType type) {
         HomePageListItemFragment homePageListItemFragment = new HomePageListItemFragment();
@@ -84,6 +86,11 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
         });
         listView.addFooterView(moreData);
         listView.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         switch (type) {
             case DAIBAN:
                 taskType="1";
@@ -97,12 +104,13 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
     }
 
     private void postTaskListRequest(ListViewOper listViewOper) {
-        ViewUtils.setListViewFooterIndicatorVisible(moreData, true);
         switch (listViewOper) {
             case REFRESH:
+                indicator.setVisibility(View.VISIBLE);
                 pageNo = 1;
                 break;
             case MORE:
+                ViewUtils.setListViewFooterIndicatorVisible(moreData, true);
                 pageNo += 1;
                 break;
         }
@@ -153,9 +161,9 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, ListGenericClass<TaskList> taskListListGenericClass) {
-            ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
             switch (listViewOper) {
                 case REFRESH:
+                    indicator.setVisibility(View.GONE);
                     if (taskListAdapter == null) {
                         taskListAdapter = new TaskListAdapter(getActivity(), taskListListGenericClass.getJsonList());
                         listView.setAdapter(taskListAdapter);
@@ -164,8 +172,9 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
                     }
                     break;
                 case MORE:
+                    ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
                     if (taskListListGenericClass.getJsonList().size() == 0) {
-                        ViewUtils.setListViewFooterTitle(moreData, "已无更多数据");
+//                        ViewUtils.setListViewFooterTitle(moreData, "已无更多数据");
                         return;
                     }
                     if (taskListAdapter == null) {
@@ -182,6 +191,7 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
+            indicator.setVisibility(View.GONE);
         }
     }
 

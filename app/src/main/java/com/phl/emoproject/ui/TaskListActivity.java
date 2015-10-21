@@ -74,13 +74,6 @@ public class TaskListActivity extends RoboActionBarActivity implements
         swipeRefreshLayout.setColorScheme(R.color.blue,
                 R.color.greenyellow,
                 R.color.orange, R.color.red);
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-                onRefresh();
-            }
-        });
         moreData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,6 +84,18 @@ public class TaskListActivity extends RoboActionBarActivity implements
         ViewUtils.setNoData(listView);
         listView.setOnItemClickListener(this);
         switchButton.setSwitchButtonListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
+        });
     }
 
     @Override
@@ -188,7 +193,7 @@ public class TaskListActivity extends RoboActionBarActivity implements
                 case MORE:
                     ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
                     if (taskListListGenericClass.getJsonList().size() == 0) {
-                        ViewUtils.setListViewFooterTitle(moreData, "已无更多数据");
+//                        ViewUtils.setListViewFooterTitle(moreData, "已无更多数据");
                         return;
                     }
                     if (taskListAdapter == null) {
