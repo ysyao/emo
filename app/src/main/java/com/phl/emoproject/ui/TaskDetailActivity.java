@@ -1,8 +1,6 @@
 package com.phl.emoproject.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
@@ -68,6 +66,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
     HistoryNodesAdapter historyNodesAdapter;
 
     ActionListHolder actionListHolder;
+    String staffStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +104,21 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         } else if (id.equals("rejectButton")) {
             postReject();
         } else if (id.equals("consultButton")) {
-            postConsult();
+            if ("".equals(staffStr)) {
+                Intent intent = new Intent(this, UserSearchActivity.class);
+                intent.putExtra("action", "consult");
+                startActivityForResult(intent, Constans.REQUEST_CODE_SEARCH_NO_STAFF);
+            } else {
+                postConsult();
+            }
         } else if (id.equals("assignButton")) {
-            postAssign();
+            if ("".equals(staffStr)) {
+                Intent intent = new Intent(this, UserSearchActivity.class);
+                intent.putExtra("action", "assign");
+                startActivityForResult(intent, Constans.REQUEST_CODE_SEARCH_NO_STAFF);
+            } else {
+                postAssign();
+            }
         } else if (id.equals("submitConsultButton")) {
             postConsultSuggestion();
         }
@@ -131,6 +142,14 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 TaskListDetail.Control control = (TaskListDetail.Control)staffRootView.getTag();
                 control.setValue(user);
                 staffRootView.setTag(control);
+            }
+         } else if (resultCode == RESULT_OK && requestCode == Constans.REQUEST_CODE_SEARCH_NO_STAFF) {
+            staffStr = data.getStringExtra("user");
+            String action = data.getStringExtra("action");
+            if (action.equals("assign")) {
+                postAssign();
+            } else if (action.equals("consult")){
+                postConsult();
             }
         }
     }
@@ -220,20 +239,21 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
      * 发起协商
      */
     private void postConsult() {
-        View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
-//        EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
-        //这里需要取tag中的值才比较准确
+//        View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
+//
+//        if (staffRootView == null) {
+//           staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze_view");
+//            if (staffRootView == null) {
+//                return;
+//            }
+//        }
 
-        if (staffRootView == null) {
-           staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze_view");
-            if (staffRootView == null) {
-                return;
-            }
+//        TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
+//        String staff = staffControl.getValue();
+        if ("".equals(staffStr)) {
+            return;
         }
-
-        TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
-        String staff = staffControl.getValue();
-        String[] values = staff.split("#");
+        String[] values = staffStr.split("#");
         if (values.length != 3) {
             Toast.makeText(this, "请选择人员", Toast.LENGTH_LONG).show();
             return;
@@ -252,7 +272,7 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
                 this,
                 task.getHistoryNodeId(),
                 task.getTitle(),
-                staff,
+                staffStr,
                 task.getUrl(),
                 notice,
                 new PostResponse());
@@ -279,27 +299,27 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
     }
 
     private void postAssign() {
-//        View flowRootView = TaskDetailUtils.getControlViewById(container, "xianshiliucheng");
-//        EditText flowEt = TaskDetailUtils.getTextFieldValue(flowRootView);
         List<TaskListDetail.Control> controls = EmoApplication.getInstance().getControls();
         String instanceId = TaskDetailUtils.getNodeId(controls);
-
-        View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
-
-        if (staffRootView == null) {
-            staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze_view");
-            if (staffRootView == null) {
-                return;
-            }
+//
+//        View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
+//
+//        if (staffRootView == null) {
+//            staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze_view");
+//            if (staffRootView == null) {
+//                return;
+//            }
+//        }
+//        //这里需要取tag中的值才比较准确
+//        TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
+//        String[] values = staffControl.getValue().split("#");
+        if ("".equals(staffStr)) {
+            return;
         }
-        //这里需要取tag中的值才比较准确
-        TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
-        String[] values = staffControl.getValue().split("#");
+        String[] values = staffStr.split("#");
         String scope = "";
         String userDescription = "";
         if ( values.length == 3) {
-//            Toast.makeText(this, "请选择人员", Toast.LENGTH_LONG).show();
-//            return;
             scope = values[0] + "#" + values[1];
             userDescription = values[2];
         } else {

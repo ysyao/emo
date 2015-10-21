@@ -79,7 +79,7 @@ public class AsyncHttpClientUtils {
         params.put("loginId", loginId);
         params.put("name", name);
         params.put("toActors", toActors);
-        params.put("historyNodeId", url);
+        params.put("url", url);
         params.put("noticeType", noticeType);
         params.put("historyNodeId", historyNodeId);
         return postRequest(context, client, Constans.CONSULT, params, baseAsyncHttpResponseHandler);
@@ -93,7 +93,7 @@ public class AsyncHttpClientUtils {
         params.put("loginId", loginId);
         params.put("name", name);
         params.put("discussId", discussId);
-        params.put("historyNodeId", url);
+        params.put("url", url);
         params.put("noticeType", noticeType);
         params.put("historyNodeId", historyNodeId);
         params.put("idea", idea);

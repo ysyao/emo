@@ -422,7 +422,7 @@ public class TaskDetailUtils {
                 TextView submitBtn = (TextView) view.findViewById(R.id.submit_button);
                 submitBtn.setTag(control);
                 holder.setSubmitConsultButton(submitBtn);
-                actionListContainer.addView(view);
+                container.addView(view);
             }
         }
         container.addView(actionList);

@@ -26,5 +26,6 @@ public interface Constans {
     String REJECT = PATH + "/reject.aspx";
 
     int REQUEST_CODE_SEARCH = 0x22;
+    int REQUEST_CODE_SEARCH_NO_STAFF = 0x23;
 
 }
