@@ -32,6 +32,7 @@ public class UserSearchActivity extends RoboActionBarActivity {
     View searchBtn;
     @InjectView(R.id.back_button)
     View backBtn;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,17 @@ public class UserSearchActivity extends RoboActionBarActivity {
             }
         });
 
+        Intent intent = getIntent();
+        id = intent.getStringExtra("id");
+        if (savedInstanceState != null) {
+            id = savedInstanceState.getString("id");
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("id", id);
     }
 
     private class SearchName extends BaseAsyncHttpResponseHandler<SearchResult> {
@@ -74,6 +86,7 @@ public class UserSearchActivity extends RoboActionBarActivity {
                         String str = (String)view.getTag();
                         Intent intent = new Intent();
                         intent.putExtra("user", str);
+                        intent.putExtra("id", id);
                         setResult(RESULT_OK, intent);
                         finish();
                     }

@@ -160,7 +160,7 @@ public class TaskDetailUtils {
         }
     }
 
-    public static View generateTextField(final Activity context, TaskListDetail.Control control) {
+    public static View generateTextField(final Activity context, final TaskListDetail.Control control) {
         View v = LayoutInflater.from(context).inflate(R.layout.view_text_filed, null);
         v.setTag(control);
         getTextFieldName(v).setText(control.getLabelText());
@@ -178,6 +178,7 @@ public class TaskDetailUtils {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, UserSearchActivity.class);
+                    intent.putExtra("id", control.getId());
                     context.startActivityForResult(intent, Constans.REQUEST_CODE_SEARCH);
                 }
             });

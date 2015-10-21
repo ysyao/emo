@@ -117,17 +117,21 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == Constans.REQUEST_CODE_SEARCH) {
-            View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
-            EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
+            String id = data.getStringExtra("id");
+            View staffRootView = TaskDetailUtils.getControlViewById(container, id);
+
             String user = data.getStringExtra("user");
             String[] values = user.split("#");
             if (values.length != 3) {
                 return;
             }
-            staff.setText(values[2]);
-            TaskListDetail.Control control = (TaskListDetail.Control)staffRootView.getTag();
-            control.setValue(user);
-            staffRootView.setTag(control);
+            if (staffRootView != null) {
+                EditText staff = TaskDetailUtils.getTextFieldValue(staffRootView);
+                staff.setText(values[2]);
+                TaskListDetail.Control control = (TaskListDetail.Control)staffRootView.getTag();
+                control.setValue(user);
+                staffRootView.setTag(control);
+            }
         }
     }
 
@@ -207,7 +211,8 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         indicator.setVisibility(View.VISIBLE);
         List<TaskListDetail.Control> controls = TaskDetailUtils.getControls(container, ideaContainer);
         Gson gson = new Gson();
-        String doc = gson.toJson(controls, new TypeToken<List<TaskListDetail.Control>>(){}.getType());
+        String doc = gson.toJson(controls, new TypeToken<List<TaskListDetail.Control>>() {
+        }.getType());
         AsyncHttpClientUtils.postReject(this, doc, new RejectRes());
     }
 
@@ -220,26 +225,34 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         //这里需要取tag中的值才比较准确
 
         if (staffRootView == null) {
-            return;
+           staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze_view");
+            if (staffRootView == null) {
+                return;
+            }
         }
 
         TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
         String staff = staffControl.getValue();
-        if (staff == null || "".equals(staff)) {
+        String[] values = staff.split("#");
+        if (values.length != 3) {
             Toast.makeText(this, "请选择人员", Toast.LENGTH_LONG).show();
             return;
         }
+
         indicator.setVisibility(View.VISIBLE);
         View noticeRootView = TaskDetailUtils.getControlViewById(container, "tongzhifangshi");
         if (noticeRootView == null) {
             return;
         }
         String notice = TaskDetailUtils.getNotice(noticeRootView);
+        if (notice == null) {
+            notice = "";
+        }
         AsyncHttpClientUtils.postConsult(
                 this,
                 task.getHistoryNodeId(),
                 task.getTitle(),
-                staffControl.getValue(),
+                staff,
                 task.getUrl(),
                 notice,
                 new PostResponse());
@@ -272,19 +285,28 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
         String instanceId = TaskDetailUtils.getNodeId(controls);
 
         View staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze");
+
         if (staffRootView == null) {
-            return;
+            staffRootView = TaskDetailUtils.getControlViewById(container, "renyuanxuanze_view");
+            if (staffRootView == null) {
+                return;
+            }
         }
         //这里需要取tag中的值才比较准确
         TaskListDetail.Control staffControl = (TaskListDetail.Control)staffRootView.getTag();
         String[] values = staffControl.getValue().split("#");
-        if ( values.length != 3) {
+        String scope = "";
+        String userDescription = "";
+        if ( values.length == 3) {
+//            Toast.makeText(this, "请选择人员", Toast.LENGTH_LONG).show();
+//            return;
+            scope = values[0] + "#" + values[1];
+            userDescription = values[2];
+        } else {
             Toast.makeText(this, "请选择人员", Toast.LENGTH_LONG).show();
             return;
         }
         indicator.setVisibility(View.VISIBLE);
-        String scope = values[0] + "#" + values[1];
-        String userDescription = values[2];
 
         AsyncHttpClientUtils.postAssign(
                 this,
