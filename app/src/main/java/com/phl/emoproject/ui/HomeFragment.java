@@ -61,7 +61,7 @@ public class HomeFragment extends RoboFragment implements AdapterView.OnItemClic
         List<HomeGridViewItem> items = new ArrayList<>();
         items.add(new HomeGridViewItem("EOM待办", R.drawable.pic_1));
         items.add(new HomeGridViewItem("EOM备案", R.drawable.pic_2));
-        items.add(new HomeGridViewItem("新闻", R.drawable.pic_3));
+        items.add(new HomeGridViewItem("预警督办", R.drawable.pic_3));
         items.add(new HomeGridViewItem("入职公告", R.drawable.pic_4));
         items.add(new HomeGridViewItem("管控体系", R.drawable.pic_5));
         items.add(new HomeGridViewItem("知识", R.drawable.pic_6));

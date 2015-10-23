@@ -37,7 +37,7 @@
         <item name="android:textAppearance">@style/CustomTabPageIndicator.Text</item>
         <item name="android:textColor">#FF555555</item>
         <item name="android:textSize">16sp</item>
-        <!--<item name="android:divider">@color/lightgray</item>-->
+        <!--<item name="android:divider">@color/black</item>-->
         <item name="android:dividerPadding">10dp</item>
         <item name="android:showDividers">middle</item>
         <item name="android:paddingLeft">8dp</item>

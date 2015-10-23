@@ -33,8 +33,12 @@ public class TaskListActivity extends RoboActionBarActivity implements
         SwipeRefreshLayout.OnRefreshListener,
         AdapterView.OnItemClickListener,
         SwitchButton.SwitchButtonListener{
-    enum ListViewOper {
+    public enum ListViewOper {
         REFRESH,MORE
+    }
+
+    public enum TaskListType {
+        ApproveTask, NotifyTask
     }
 
     @InjectView(R.id.switch_button)
@@ -116,6 +120,7 @@ public class TaskListActivity extends RoboActionBarActivity implements
         }
         AsyncHttpClientUtils.postTaskList(
                 this,
+                type,
                 String.valueOf(pageNo),
                 String.valueOf(pageSize),
                 taskType,

@@ -114,7 +114,9 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
                 pageNo += 1;
                 break;
         }
-        AsyncHttpClientUtils.postTaskList(getActivity(),
+        AsyncHttpClientUtils.postTaskList(
+                getActivity(),
+                type,
                 String.valueOf(pageNo),
                 String.valueOf(pageSize),
                 taskType,

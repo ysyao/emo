@@ -9,6 +9,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
 import com.phl.emoproject.core.Constans;
+import com.phl.emoproject.home.HomeListType;
+import com.phl.emoproject.ui.TaskListActivity;
 
 public class AsyncHttpClientUtils {
     final static AsyncHttpClient client = new AsyncHttpClient();
@@ -44,7 +46,7 @@ public class AsyncHttpClientUtils {
         return postRequest(context, client, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
     }
 
-    public static AsyncHttpClient postTaskList(Context context, String pageNo, String pageSize, String taskType, String status, String keyWords, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+    public static AsyncHttpClient postTaskList(Context context, HomeListType homeListType, String pageNo, String pageSize, String taskType, String status, String keyWords, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
         AsyncHttpClient client = AsyncHttpClientUtils.createClient();
         RequestParams params = new RequestParams();
         SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -55,7 +57,13 @@ public class AsyncHttpClientUtils {
         params.put("taskType", taskType);
         params.put("status", status);
         params.put("keyWords", keyWords);
-        return postRequest(context, client, Constans.TASK_LIST, params, baseAsyncHttpResponseHandler);
+        String url = "";
+        if (homeListType == HomeListType.DAIBAN) {
+            url = Constans.TASK_LIST;
+        } else {
+            url = Constans.NOTIFY_LIST;
+        }
+        return postRequest(context, client, url, params, baseAsyncHttpResponseHandler);
     }
 
     public static AsyncHttpClient postTaskDetail(Context context, String taskId, String nodeId, String historyNodeId, String discussId, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
@@ -98,6 +106,15 @@ public class AsyncHttpClientUtils {
         params.put("historyNodeId", historyNodeId);
         params.put("idea", idea);
         return postRequest(context, client, Constans.CONSULT, params, baseAsyncHttpResponseHandler);
+    }
+
+    public static AsyncHttpClient postUserInfo(Context context, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String loginId = sp.getString(Constans.LOGIN_ID, "");
+        params.put("loginId", loginId);
+        return postRequest(context, client, Constans.USER_INFO, params, baseAsyncHttpResponseHandler);
     }
 
     public static AsyncHttpClient postSearchUserScope(Context context, String keyWord, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {

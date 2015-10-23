@@ -17,13 +17,16 @@ public interface Constans {
     String LOGIN = PATH + "/login.aspx";
     String NEWS_LIST = PATH + "/getNewsList.aspx";
     String NEWS_DETAIL = PATH + "/getNewInfo.aspx";
-    String TASK_LIST = PATH + "/getTaskList.aspx";
+//    String TASK_LIST = PATH + "/getTaskList.aspx";
+    String TASK_LIST = PATH + "/getApproveTaskList.aspx";
+    String NOTIFY_LIST = PATH + "/getNotifyTaskList.aspx";
     String TASK_DETAIL = PATH + "/getTranactFlowForm.aspx";
     String CONSULT = PATH + "/consult.aspx";
     String USER_SCOPE = PATH + "/getUserScope.aspx";
     String ASSIGN = PATH + "/assign.aspx";
     String APPROVAL = PATH + "/approve.aspx";
     String REJECT = PATH + "/reject.aspx";
+    String USER_INFO = PATH + "/getUserInfo.aspx";
 
     int REQUEST_CODE_SEARCH = 0x22;
     int REQUEST_CODE_SEARCH_NO_STAFF = 0x23;

@@ -17,7 +17,7 @@
         android:id="@+id/bottombar"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:background="@color/lightgray"
+        android:background="@color/blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -33,15 +33,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="新闻"
+                android:text="新闻公告"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                bottombar:selected_icon="@drawable/pic_news_selected"
-                bottombar:unselected_icon="@drawable/pic_news_unselected"
-                bottombar:text_selected_color="@color/blue"
-                bottombar:text_unselected_color="@color/category_bar_header_text_color"
-                bottombar:background_selected_color="@color/lightgray"
-                bottombar:background_unselected_color="@color/verylightgray"
+                bottombar:selected_icon="@drawable/ic_action_pic_news_selected"
+                bottombar:unselected_icon="@drawable/ic_action_pic_news_unselected"
+                bottombar:text_selected_color="@color/white"
+                bottombar:text_unselected_color="@color/dark_silver"
+                bottombar:background_selected_color="@color/blue"
+                bottombar:background_unselected_color="@color/blue"
                 />
 
         </RelativeLayout>
@@ -61,12 +61,12 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="12sp"
-                bottombar:selected_icon="@drawable/pic_home_selected"
-                bottombar:unselected_icon="@drawable/pic_home_unselected"
-                bottombar:text_selected_color="@color/blue"
-                bottombar:text_unselected_color="@color/category_bar_header_text_color"
-                bottombar:background_selected_color="@color/lightgray"
-                bottombar:background_unselected_color="@color/verylightgray"
+                bottombar:selected_icon="@drawable/ic_action_pic_home_selected"
+                bottombar:unselected_icon="@drawable/ic_action_pic_home_unselected"
+                bottombar:text_selected_color="@color/white"
+                bottombar:text_unselected_color="@color/dark_silver"
+                bottombar:background_selected_color="@color/blue"
+                bottombar:background_unselected_color="@color/blue"
                 />
             <View
                 android:id="@+id/center_horizental"
@@ -89,12 +89,12 @@
                 android:text="个人中心"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                bottombar:selected_icon="@drawable/pic_me_selected"
-                bottombar:unselected_icon="@drawable/pic_me_unselected"
-                bottombar:text_selected_color="@color/blue"
-                bottombar:text_unselected_color="@color/category_bar_header_text_color"
-                bottombar:background_selected_color="@color/lightgray"
-                bottombar:background_unselected_color="@color/verylightgray"
+                bottombar:selected_icon="@drawable/ic_action_pic_me_selected"
+                bottombar:unselected_icon="@drawable/ic_action_pic_me_unselected"
+                bottombar:text_selected_color="@color/white"
+                bottombar:text_unselected_color="@color/dark_silver"
+                bottombar:background_selected_color="@color/blue"
+                bottombar:background_unselected_color="@color/blue"
                 />
         </RelativeLayout>
 
