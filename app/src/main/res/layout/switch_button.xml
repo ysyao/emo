@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <RadioButton
+        android:checked="true"
+        android:button="@null"
+        android:background="@drawable/bg_switch_left"
+        android:textColor="@color/white"
+        android:padding="@dimen/activity_ui_margin_medium"
+        android:id="@+id/left"
+        android:gravity="center"
+        android:text="未完成"
+        android:textStyle="bold"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <RadioButton
+        android:button="@null"
+        android:textColor="@color/blue"
+        android:textStyle="bold"
+        android:padding="@dimen/activity_ui_margin_medium"
+        android:id="@+id/right"
+        android:background="@drawable/bg_switch_right"
+        android:gravity="center"
+        android:text="已完成"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
