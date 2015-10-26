@@ -18,7 +18,6 @@ import com.phl.emoproject.home.TaskListAdapter;
 import com.phl.emoproject.pojo.ListGenericClass;
 import com.phl.emoproject.pojo.TaskList;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
-import com.phl.emoproject.utils.ViewUtils;
 
 import org.apache.http.Header;
 
@@ -31,7 +30,7 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
     ListView listView;
     @InjectView(R.id.no_data)
     View noData;
-    View moreData;
+//    View moreData;
     HomeListType type;
     Activity activity;
     int pageNo = 1;
@@ -76,15 +75,15 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView.setEmptyView(noData);
-        moreData = ViewUtils.createListViewFooterView(activity);
-        ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
-        moreData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postTaskListRequest(ListViewOper.MORE);
-            }
-        });
-        listView.addFooterView(moreData);
+//        moreData = ViewUtils.createListViewFooterView(activity);
+//        ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
+//        moreData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                postTaskListRequest(ListViewOper.MORE);
+//            }
+//        });
+//        listView.addFooterView(moreData);
         listView.setOnItemClickListener(this);
     }
 
@@ -110,11 +109,11 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
                 pageNo = 1;
                 break;
             case MORE:
-                ViewUtils.setListViewFooterIndicatorVisible(moreData, true);
+//                ViewUtils.setListViewFooterIndicatorVisible(moreData, true);
                 pageNo += 1;
                 break;
         }
-        AsyncHttpClientUtils.postTaskList(
+        AsyncHttpClientUtils.postTaskListHomePage(
                 getActivity(),
                 type,
                 String.valueOf(pageNo),
@@ -167,32 +166,32 @@ public class HomePageListItemFragment extends RoboFragment implements AdapterVie
                 case REFRESH:
                     indicator.setVisibility(View.GONE);
                     if (taskListAdapter == null) {
-                        taskListAdapter = new TaskListAdapter(getActivity(), taskListListGenericClass.getJsonList());
-                        listView.setAdapter(taskListAdapter);
-                    } else {
-                        taskListAdapter.updateAdapter(taskListListGenericClass.getJsonList());
-                    }
-                    break;
-                case MORE:
-                    ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
-                    if (taskListListGenericClass.getJsonList().size() == 0) {
+                taskListAdapter = new TaskListAdapter(getActivity(), taskListListGenericClass.getJsonList());
+                listView.setAdapter(taskListAdapter);
+            } else {
+                taskListAdapter.updateAdapter(taskListListGenericClass.getJsonList());
+            }
+            break;
+            case MORE:
+//                    ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
+            if (taskListListGenericClass.getJsonList().size() == 0) {
 //                        ViewUtils.setListViewFooterTitle(moreData, "已无更多数据");
-                        return;
-                    }
-                    if (taskListAdapter == null) {
-                        taskListAdapter = new TaskListAdapter(getActivity(), taskListListGenericClass.getJsonList());
-                        listView.setAdapter(taskListAdapter);
-                    } else {
-                        taskListAdapter.addMoreData(taskListListGenericClass.getJsonList());
-                    }
-                    break;
+                return;
+            }
+            if (taskListAdapter == null) {
+                taskListAdapter = new TaskListAdapter(getActivity(), taskListListGenericClass.getJsonList());
+                listView.setAdapter(taskListAdapter);
+            } else {
+                taskListAdapter.addMoreData(taskListListGenericClass.getJsonList());
+            }
+            break;
             }
 
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-            ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
+//            ViewUtils.setListViewFooterIndicatorVisible(moreData, false);
             indicator.setVisibility(View.GONE);
         }
     }

@@ -1,6 +1,5 @@
 package com.phl.emoproject.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,7 +15,6 @@ import com.phl.emoproject.home.HomeListType;
 import com.phl.emoproject.home.TaskListAdapter;
 import com.phl.emoproject.pojo.ListGenericClass;
 import com.phl.emoproject.pojo.TaskList;
-import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
 import com.phl.emoproject.utils.ToolbarUtils;
 import com.phl.emoproject.utils.ViewUtils;

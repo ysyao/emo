@@ -46,7 +46,7 @@ public class AsyncHttpClientUtils {
         return postRequest(context, client, Constans.NEWS_DETAIL, params, baseAsyncHttpResponseHandler);
     }
 
-    public static AsyncHttpClient postTaskList(Context context, HomeListType homeListType, String pageNo, String pageSize, String taskType, String status, String keyWords, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+    public static AsyncHttpClient postTaskListHomePage(Context context, HomeListType homeListType, String pageNo, String pageSize, String taskType, String status, String keyWords, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
         AsyncHttpClient client = AsyncHttpClientUtils.createClient();
         RequestParams params = new RequestParams();
         SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -64,6 +64,20 @@ public class AsyncHttpClientUtils {
             url = Constans.NOTIFY_LIST;
         }
         return postRequest(context, client, url, params, baseAsyncHttpResponseHandler);
+    }
+
+    public static AsyncHttpClient postTaskList(Context context, HomeListType homeListType, String pageNo, String pageSize, String taskType, String status, String keyWords, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {
+        AsyncHttpClient client = AsyncHttpClientUtils.createClient();
+        RequestParams params = new RequestParams();
+        SharedPreferences sp = context.getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String loginId = sp.getString(Constans.LOGIN_ID, "");
+        params.put("LoginId", loginId);
+        params.put("pageNo", pageNo);
+        params.put("pageSize", pageSize);
+        params.put("taskType", taskType);
+        params.put("status", status);
+        params.put("keyWords", keyWords);
+        return postRequest(context, client, Constans.TASK_LIST_PAGE, params, baseAsyncHttpResponseHandler);
     }
 
     public static AsyncHttpClient postTaskDetail(Context context, String taskId, String nodeId, String historyNodeId, String discussId, BaseAsyncHttpResponseHandler baseAsyncHttpResponseHandler) {

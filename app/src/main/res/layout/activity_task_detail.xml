@@ -7,6 +7,7 @@
 
     <ScrollView
         android:id="@+id/scrollView"
+        android:background="@color/white"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,7 +17,6 @@
             android:paddingRight="@dimen/activity_ui_margin_large"
             android:paddingTop="@dimen/activity_ui_margin_large"
             android:paddingBottom="@dimen/activity_ui_margin_large"
-            android:background="@color/white"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
