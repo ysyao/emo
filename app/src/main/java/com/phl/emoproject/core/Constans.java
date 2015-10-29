@@ -12,7 +12,8 @@ public interface Constans {
     String FILE_PATH = Environment.getExternalStorageDirectory().getPath()+"/EMO_FILES";
 
 //    String PATH  = "http://oa.ynrjkj.com/mobile/EomWebService.asmx";
-    String PATH  = "http://oa.ynrjkj.com/mobile";
+//    String PATH  = "http://oa.ynrjkj.com/mobile";
+    String PATH  = "http://oa.toprivermis.com/mobile";
 
     String LOGIN = PATH + "/login.aspx";
     String NEWS_LIST = PATH + "/getNewsList.aspx";

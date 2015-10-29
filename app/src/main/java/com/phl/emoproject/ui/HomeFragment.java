@@ -83,10 +83,10 @@ public class HomeFragment extends RoboFragment implements AdapterView.OnItemClic
                 intent.putExtra("type", HomeListType.BEIAN);
                 startActivity(intent);
                 break;
-            case 2:
-                intent = new Intent(activity, NewsListActivity.class);
-                startActivity(intent);
-                break;
+//            case 2:
+//                intent = new Intent(activity, NewsListActivity.class);
+//                startActivity(intent);
+//                break;
         }
     }
 }

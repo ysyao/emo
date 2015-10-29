@@ -8,6 +8,15 @@ public class UserInfo {
     private String postName;
     private String departmentName;
     private String corporationName;
+    private Message message;
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
 
     public String getUserName() {
         return userName;

@@ -112,8 +112,8 @@ public class NewsDetailActivity extends RoboActionBarActivity implements
             @Override
             public void onSuccess(int statusCode, Header[] headers, File response) {
                 // Do something with the file `response`
-//                String path = DownloadFileUtils.storeFile(response, fileInfo.getFileName());
-                Toast.makeText(getApplicationContext(), fileInfo.getFileName()+"已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
+                DownloadFileUtils.storeFile(response, fileInfo.getFileName());
+                Toast.makeText(getApplicationContext(), fileInfo.getFileName()+" 已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
             }
         });
     }
