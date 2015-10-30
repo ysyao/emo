@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:padding="@dimen/activity_ui_margin_tiny"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:paddingTop="@dimen/activity_ui_margin_tiny"
+    android:paddingLeft="@dimen/activity_ui_margin_tiny"
+    android:paddingRight="@dimen/activity_ui_margin_tiny"
+    android:layout_height="wrap_content">
     <TextView
         android:id="@+id/time"
         android:text="2015-12-31 12:32:44"
@@ -16,9 +22,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+</LinearLayout>
     <TextView
+        android:paddingLeft="@dimen/activity_ui_margin_small"
+        android:paddingRight="@dimen/activity_ui_margin_small"
+        android:paddingBottom="@dimen/activity_ui_margin_small"
         android:id="@+id/action"
-        android:layout_marginLeft="@dimen/activity_ui_margin_large"
         android:text="发起"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
