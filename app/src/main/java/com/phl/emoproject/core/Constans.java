@@ -15,19 +15,19 @@ public interface Constans {
 //    String PATH  = "http://oa.ynrjkj.com/mobile";
     String PATH  = "http://oa.toprivermis.com/mobile";
 
-    String LOGIN = PATH + "/login.aspx";
-    String NEWS_LIST = PATH + "/getNewsList.aspx";
-    String NEWS_DETAIL = PATH + "/getNewInfo.aspx";
-    String TASK_LIST_PAGE = PATH + "/getTaskList.aspx";
-    String TASK_LIST = PATH + "/getApproveTaskList.aspx";
-    String NOTIFY_LIST = PATH + "/getNotifyTaskList.aspx";
-    String TASK_DETAIL = PATH + "/getTranactFlowForm.aspx";
-    String CONSULT = PATH + "/consult.aspx";
-    String USER_SCOPE = PATH + "/getUserScope.aspx";
-    String ASSIGN = PATH + "/assign.aspx";
-    String APPROVAL = PATH + "/approve.aspx";
-    String REJECT = PATH + "/reject.aspx";
-    String USER_INFO = PATH + "/getUserInfo.aspx";
+    String LOGIN =  "/login.aspx";
+    String NEWS_LIST ="/getNewsList.aspx";
+    String NEWS_DETAIL ="/getNewInfo.aspx";
+    String TASK_LIST_PAGE ="/getTaskList.aspx";
+    String TASK_LIST ="/getApproveTaskList.aspx";
+    String NOTIFY_LIST = "/getNotifyTaskList.aspx";
+    String TASK_DETAIL = "/getTranactFlowForm.aspx";
+    String CONSULT = "/consult.aspx";
+    String USER_SCOPE = "/getUserScope.aspx";
+    String ASSIGN = "/assign.aspx";
+    String APPROVAL ="/approve.aspx";
+    String REJECT = "/reject.aspx";
+    String USER_INFO ="/getUserInfo.aspx";
 
     int REQUEST_CODE_SEARCH = 0x22;
     int REQUEST_CODE_SEARCH_NO_STAFF = 0x23;

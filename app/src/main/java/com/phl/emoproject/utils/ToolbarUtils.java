@@ -55,8 +55,23 @@ public class ToolbarUtils {
         return v;
     }
 
+    public static TextView setRightTitleEnable(final Activity context, Toolbar toolbar, boolean isVisible) {
+        TextView v = (TextView)toolbar.findViewById(R.id.right_title);
+        if (isVisible) {
+            v.setVisibility(View.VISIBLE);
+        } else if (v.getVisibility() == View.VISIBLE && !isVisible){
+            v.setVisibility(View.GONE);
+        }
+        return v;
+    }
+
     public static void setLeftTitle(Activity context, Toolbar toolbar, String title) {
         TextView v = setLeftTitleEnable(context, toolbar, true);
+        v.setText(title);
+    }
+
+    public static void setRightTitle(Activity context, Toolbar toolbar, String title) {
+        TextView v = setRightTitleEnable(context, toolbar, true);
         v.setText(title);
     }
 

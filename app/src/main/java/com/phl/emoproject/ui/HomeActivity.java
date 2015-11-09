@@ -1,11 +1,18 @@
 package com.phl.emoproject.ui;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 
 import com.phl.emoproject.R;
+import com.phl.emoproject.core.Constans;
+import com.phl.emoproject.core.EmoApplication;
 import com.phl.emoproject.home.HomeViewPagerAdapter;
 import com.phl.emoproject.utils.ToolbarUtils;
 import com.phl.emoproject.widget.bottom_bar.OnSelectableTextViewClickedListener;
@@ -36,6 +43,32 @@ public class HomeActivity extends RoboActionBarActivity implements
         ToolbarUtils.normalSetting(this, toolbar);
         ToolbarUtils.setCenterTitle(toolbar, "首页");
         ToolbarUtils.setLeftTitleEnable(this, toolbar, false);
+        View right = ToolbarUtils.setRightTitleEnable(this, toolbar, true);
+        ToolbarUtils.setRightTitle(this, toolbar, "ip配置");
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View v = LayoutInflater.from(HomeActivity.this).inflate(R.layout.edittext_dialog, null);
+                final EditText et = (EditText) v.findViewById(R.id.input_ip);
+                new AlertDialog.Builder(HomeActivity.this).setTitle("ip配置").setView(v).setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        String ip = et.getText().toString();
+                        if (ip == null || "".equals(ip)) {
+                            return;
+                        }
+                        EmoApplication.getInstance().setPath(ip);
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+            }
+        });
+
         newsTv.setOnTextViewClickedListener(this);
         meTv.setOnTextViewClickedListener(this);
         homeTv.setOnTextViewClickedListener(this);
