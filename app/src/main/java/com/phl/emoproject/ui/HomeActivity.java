@@ -43,31 +43,31 @@ public class HomeActivity extends RoboActionBarActivity implements
         ToolbarUtils.normalSetting(this, toolbar);
         ToolbarUtils.setCenterTitle(toolbar, "首页");
         ToolbarUtils.setLeftTitleEnable(this, toolbar, false);
-        View right = ToolbarUtils.setRightTitleEnable(this, toolbar, true);
-        ToolbarUtils.setRightTitle(this, toolbar, "ip配置");
-        right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                View v = LayoutInflater.from(HomeActivity.this).inflate(R.layout.edittext_dialog, null);
-                final EditText et = (EditText) v.findViewById(R.id.input_ip);
-                new AlertDialog.Builder(HomeActivity.this).setTitle("ip配置").setView(v).setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        String ip = et.getText().toString();
-                        if (ip == null || "".equals(ip)) {
-                            return;
-                        }
-                        EmoApplication.getInstance().setPath(ip);
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                }).show();
-            }
-        });
+//        View right = ToolbarUtils.setRightTitleEnable(this, toolbar, true);
+//        ToolbarUtils.setRightTitle(this, toolbar, "ip配置");
+//        right.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                View v = LayoutInflater.from(HomeActivity.this).inflate(R.layout.edittext_dialog, null);
+//                final EditText et = (EditText) v.findViewById(R.id.input_ip);
+//                new AlertDialog.Builder(HomeActivity.this).setTitle("ip配置").setView(v).setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        dialogInterface.dismiss();
+//                        String ip = et.getText().toString();
+//                        if (ip == null || "".equals(ip)) {
+//                            return;
+//                        }
+//                        EmoApplication.getInstance().setPath(ip);
+//                    }
+//                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        dialogInterface.dismiss();
+//                    }
+//                }).show();
+//            }
+//        });
 
         newsTv.setOnTextViewClickedListener(this);
         meTv.setOnTextViewClickedListener(this);

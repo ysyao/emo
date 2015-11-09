@@ -8,6 +8,7 @@ public interface Constans {
     String LOGIN_ID = "loginId";
     String LOGIN_ID_STORED = "loginIdsdafsf";
     String PASSWORD = "password";
+    String ADDRESS = "address_ip";
 
     String FILE_PATH = Environment.getExternalStorageDirectory().getPath()+"/EMO_FILES";
 

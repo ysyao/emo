@@ -149,6 +149,21 @@
                 android:textSize="20sp"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/server_config"
+            android:gravity="center"
+            android:drawableLeft="@android:drawable/ic_menu_info_details"
+            android:layout_marginTop="@dimen/activity_ui_margin_medium"
+            android:layout_marginRight="@dimen/applet_listitem_image_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/container"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:text="服务器配置"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="0dp"

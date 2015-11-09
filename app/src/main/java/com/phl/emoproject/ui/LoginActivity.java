@@ -1,8 +1,11 @@
 package com.phl.emoproject.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -12,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.phl.emoproject.R;
 import com.phl.emoproject.core.BaseAsyncHttpResponseHandler;
+import com.phl.emoproject.core.EmoApplication;
 import com.phl.emoproject.pojo.LoginRes;
 import com.phl.emoproject.utils.AsyncHttpClientUtils;
 import com.phl.emoproject.core.Constans;
@@ -39,6 +43,8 @@ public class LoginActivity extends RoboActionBarActivity{
     ILifeRadioButton isStore;
     @InjectView(R.id.indicator)
     ProgressBar indicator;
+    @InjectView(R.id.server_config)
+    View serverConfig;
     AsyncHttpClient client;
 
     @Override
@@ -72,6 +78,30 @@ public class LoginActivity extends RoboActionBarActivity{
                         accountStr,
                         passStr,
                         new LoginResponse());
+            }
+        });
+        serverConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View v = LayoutInflater.from(LoginActivity.this).inflate(R.layout.edittext_dialog, null);
+                final EditText et = (EditText) v.findViewById(R.id.input_ip);
+                et.setText(EmoApplication.getInstance().getPath()+"");
+                new AlertDialog.Builder(LoginActivity.this).setTitle("服务器配置").setView(v).setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        String ip = et.getText().toString();
+                        if (ip == null || "".equals(ip)) {
+                            return;
+                        }
+                        EmoApplication.getInstance().setPath(ip);
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
             }
         });
     }

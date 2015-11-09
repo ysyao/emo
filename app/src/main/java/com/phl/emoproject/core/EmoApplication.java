@@ -1,6 +1,7 @@
 package com.phl.emoproject.core;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import com.phl.emoproject.pojo.TaskListDetail;
 
@@ -16,6 +17,8 @@ public class EmoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        SharedPreferences sp = getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+        path = sp.getString(Constans.ADDRESS, path);
     }
 
     public static synchronized EmoApplication getInstance() {
@@ -35,6 +38,10 @@ public class EmoApplication extends Application {
     }
 
     public void setPath(String path) {
+        SharedPreferences sp = getSharedPreferences(Constans.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(Constans.ADDRESS, path);
+        editor.apply();
         this.path = path;
     }
 }
