@@ -9,6 +9,15 @@ public class TaskListDetail {
         private String isHidden;
         private String controlType;
         private String value;
+        private String dataType;
+
+        public String getDataType() {
+            return dataType;
+        }
+
+        public void setDataType(String dataType) {
+            this.dataType = dataType;
+        }
 
         public String getId() {
             return id;
