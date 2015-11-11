@@ -114,6 +114,7 @@ public class NewsDetailActivity extends RoboActionBarActivity implements
                 // Do something with the file `response`
                 DownloadFileUtils.storeFile(response, fileInfo.getFileName());
                 Toast.makeText(getApplicationContext(), fileInfo.getFileName()+" 已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
+                newsFileAdapter.notifyDataSetChanged();
             }
         });
     }

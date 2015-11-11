@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.phl.emoproject.R;
+import com.phl.emoproject.core.Constans;
 import com.phl.emoproject.pojo.NewsDetail;
 import com.phl.emoproject.pojo.TaskListDetail;
 import com.phl.emoproject.widget.BaseListAdapter;
 
+import java.io.File;
 import java.util.List;
 
 public class DetailFileAdapter extends BaseListAdapter<TaskListDetail.TaskFile> {
@@ -48,7 +50,15 @@ public class DetailFileAdapter extends BaseListAdapter<TaskListDetail.TaskFile> 
         }
         final TaskListDetail.TaskFile info = getItem(i);
         holder.fileName.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-        holder.fileName.setText(info.getName());
+//        holder.fileName.setText(info.getName());
+        String path = Constans.FILE_PATH + "/" + info.getName();
+        File file = new File(path);
+        if (file.exists()) {
+            holder.fileName.setText(info.getName()+"(已下载)");
+        } else {
+            holder.fileName.setText(info.getName());
+        }
+
         holder.download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

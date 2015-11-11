@@ -184,8 +184,9 @@ public class TaskDetailActivity extends RoboActionBarActivity implements
             @Override
             public void onSuccess(int statusCode, Header[] headers, File response) {
                 // Do something with the file `response`
-//                String path = DownloadFileUtils.storeFile(response, fileInfo.getFileName());
+                DownloadFileUtils.storeFile(response, fileInfo.getName());
                 Toast.makeText(getApplicationContext(), fileInfo.getName() + "已经下载完毕，可以查看。", Toast.LENGTH_LONG).show();
+                detailFileAdapter.notifyDataSetChanged();
             }
         });
     }

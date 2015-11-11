@@ -52,11 +52,7 @@ public class NewsFragment extends RoboFragment implements
         swipeRefreshLayout.setColorScheme(R.color.blue,
                 R.color.greenyellow,
                 R.color.orange, R.color.red);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -64,6 +60,12 @@ public class NewsFragment extends RoboFragment implements
                 onRefresh();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override

@@ -17,6 +17,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DownloadFileUtils {
+    public enum FileType {
+        IMAGE("image/*"), DOC("application/msword"), PDF("application/pdf"), APPLICATION("application/*");
+        private String mimeType;
+        FileType(String mimeType) {
+            this.mimeType = mimeType;
+        }
+    }
+
+    public static void openDefaultFolder(Context context) {
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Uri uri = Uri.parse(Constans.FILE_PATH);
+//        intent.setDataAndType(uri, "*/*");
+//        context.startActivity(intent);
+
+//        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension
+//                (MimeTypeMap.getFileExtensionFromUrl(Constans.FILE_PATH));
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setDataAndType(uri, "*/*");
+        context.startActivity(intent);
+    }
 
     public static String storeFile(File response, String fileName) {
         try {
@@ -54,12 +74,30 @@ public class DownloadFileUtils {
         String path = Constans.FILE_PATH + "/" + name;
         File file = new File(path);
         Uri uri_path = Uri.fromFile(file);
-        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension
-                (MimeTypeMap.getFileExtensionFromUrl(path));
+//        String mimeType1 = MimeTypeMap.getSingleton().getMimeTypeFromExtension
+//                (MimeTypeMap.getFileExtensionFromUrl(path));
 
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+        String mimeType = detectFileType(name).mimeType;
         intent.setType(mimeType);
         intent.setDataAndType(uri_path, mimeType);
-        context.startActivity(intent);
+        context.startActivity(Intent.createChooser(intent, "请选择打开的程序"));
+    }
+
+    public static FileType detectFileType(String name) {
+        String[] names = name.split("\\.");
+        if (names.length == 1) {
+            return FileType.APPLICATION;
+        }
+        String type = names[names.length-1];
+        if (type.equals("jpg") || type.equals("png") || type.equals("bmp") || type.equals("jpeg")) {
+            return FileType.IMAGE;
+        } else if (type.equals("doc") || type.equals("xlsx")) {
+            return FileType.DOC;
+        } else if (type.equals("pdf")) {
+            return FileType.PDF;
+        } else {
+            return FileType.APPLICATION;
+        }
     }
 }
